@@ -1,12 +1,14 @@
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class CssParser {
 
     companion object {
         private const val stylesheet =
-            "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*?([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|]+)\\{([^\\}]+)\\}"
-        private const val selector = "(\\.|#|)(\\w+|\\*)|\\[([^\\]]*?)\\]|(::?)([\\w-\\d\\(\\)]*)|(>|~|\\+)|(,| )"
-        private const val attribute = "([\\w-]*?):([^;]*);"
+            "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-]+)\\{([^\\}]+)\\}"
+        private const val selector =
+            "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)([\\w\\-\\d\\(\\)]+)|([\\>\\~\\+])|([, ])"
+        private const val attribute = "([\\w-]+):([^;]*);"
 
         private val styleSheetPattern = Pattern.compile(stylesheet)
         private val selectorPattern = Pattern.compile(selector)
@@ -27,7 +29,6 @@ class CssParser {
 
         private const val ELEM_MARKER_CLASS = "."
         private const val ELEM_MARKER_ID = "#"
-        private const val ELEM_MARKER_TAG = ""
         private const val ELEM_NAME_ALL = "*"
         private const val SPECIFY_INSIDE = ">"
         private const val SPECIFY_NEXT = "+"
@@ -40,10 +41,30 @@ class CssParser {
 
     }
 
+    var stylesheetTime = 0L
+    var bodyTime = 0L
+    var selectorTime = 0L
+
     init {
         println("Hello from parser")
         //testStylesheet()
-        testSelector()
+        //testSelector()
+
+        val styleSheet = parseStylesheet(testCss1)
+
+
+        val cascades = styleSheet.map {
+            val selectors = parseSelector(it.key)
+            val attrs = parseBody(it.value)
+            Cascade(selectors, attrs)
+        }
+        val allTime = stylesheetTime + selectorTime + bodyTime
+        val allF = allTime.toFloat()
+        println("time: all=$allTime, style=$stylesheetTime(${stylesheetTime / allF}), selector=$selectorTime(${selectorTime / allF}), body=$bodyTime(${bodyTime / allF})")
+
+        cascades.forEach {
+            println(it.getData())
+        }
     }
 
     private fun testStylesheet() {
@@ -59,11 +80,18 @@ class CssParser {
             "[style*=\"color:#000\"],\n" +
                     "[style*=\"color:#000000\"],\n" +
                     "[style*=\"color:black\"] *"
-        parseSelector(lel)
+        val selectors = parseSelector(lel)
+
+        println("$lel")
+        println("parsed:")
+        selectors.forEach {
+            println("res: ${it.getData()}")
+        }
     }
 
 
     private fun parseStylesheet(cssSource: String): Map<String, String> {
+        val time = System.currentTimeMillis()
         val matcher = styleSheetPattern.matcher(cssSource)
         val result = mutableMapOf<String, String>()
         matcher.findAll {
@@ -71,22 +99,26 @@ class CssParser {
             if (commentSrc == null) {
                 val selectorSrc = it.group(STYLESHEET_SELECTOR)
                 val bodySrc = it.group(STYLESHEET_BODY)
-                val selector = selectorSrc.trim()
-                val body = bodySrc.trim()
+                val selector = selectorSrc.trimWhiteSpace()
+                val body = bodySrc.trimWhiteSpace()
                 result[selector] = body
             }
         }
+        stylesheetTime += (System.currentTimeMillis() - time)
         return result
     }
 
-    private fun parseSelector(selectorSrc: String) {
+    private fun parseSelector(selectorSrc: String): List<Selector> {
+        val time = System.currentTimeMillis()
         val matcherSrc = selectorPattern.matcher(selectorSrc)
 
         var currentEntry = SelectorEntry()
         var currentSelector = Selector()
         currentSelector.addEntry(currentEntry)
-        val selectors = mutableListOf(currentSelector)
+        val selectors = mutableListOf<Selector>()
+        selectors.add(currentSelector)
         var lastIsNew = true
+
         matcherSrc.findAll { matcher ->
 
             val elemMarker = matcher.group(SELECTOR_ELEM_MARKER)
@@ -94,7 +126,7 @@ class CssParser {
 
             val attr = matcher.group(SELECTOR_ATTR)
 
-            val pseudoMarker = matcher.group(SELECTOR_PSEUDO_MARKER)
+            //val pseudoMarker = matcher.group(SELECTOR_PSEUDO_MARKER)
             val pseudoName = matcher.group(SELECTOR_PSEUDO_NAME)
 
             val specify = matcher.group(SELECTOR_SPECIFY)
@@ -116,27 +148,25 @@ class CssParser {
 
             lastIsNew = isSelectorDelimiter || isNewEntry
 
-
             when (elemMarker) {
-                ELEM_MARKER_TAG -> {
-                    currentEntry.withNodeTag = elemName
-                }
                 ELEM_MARKER_ID -> {
                     currentEntry.withNodeId = elemName
                 }
                 ELEM_MARKER_CLASS -> {
-                    currentEntry.withClasses.add(elemName)
+                    currentEntry.addClass(elemName)
+                }
+                else -> {
+                    currentEntry.withNodeTag = elemName
                 }
             }
 
             attr?.also {
-                currentEntry.withAttributes.add(it)
+                currentEntry.addAttr(it)
             }
 
             pseudoName?.also {
-                currentEntry.withPseudo.add(it)
+                currentEntry.addPseudo(it)
             }
-
 
             specify?.also {
                 currentEntry.withSpecify = when (it) {
@@ -148,12 +178,26 @@ class CssParser {
             }
         }
 
-        println("$selectorSrc")
-        println("parsed:")
-        selectors.forEach {
-            println("res: ${it.getData()}")
-        }
 
+        val currentTime = (System.currentTimeMillis() - time)
+        selectorTime += currentTime
+        return selectors
+    }
+
+    private fun parseBody(bodySrc: String): Map<String, String> {
+        val time = System.currentTimeMillis()
+        val matcherSrc = attributePattern.matcher(bodySrc)
+        val result = mutableMapOf<String, String>()
+        matcherSrc.findAll {
+            val nameSrc = it.group(ATTR_NAME)
+            val valueSrc = it.group(ATTR_VALUE)
+
+            val name = nameSrc.trimWhiteSpace()
+            val value = valueSrc.trimWhiteSpace()
+            result[name] = value
+        }
+        bodyTime += (System.currentTimeMillis() - time)
+        return result
     }
 
 }
