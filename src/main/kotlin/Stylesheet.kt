@@ -1,6 +1,12 @@
+import kotlin.math.max
+
 class Stylesheet {
 
-    val map = mutableMapOf<String, Cascade>()
+    var mainTime = 0L
+    var attrTime = 0L
+    var selectorTime = 0L
+    val allTime
+        get() = mainTime + selectorTime + attrTime
 
     val cascades = mutableListOf<Cascade>()
     val selectors = mutableMapOf<Int, MutableList<Selector>>()
@@ -20,7 +26,6 @@ class Stylesheet {
 
     fun putSelector(selector: Selector) {
         val key = selector.hashCode()
-        println("putselector $key, sel=${selector.getData()}, ${selectors[key]?.size}")
         val addedSelectors = selectors[key] ?: (mutableListOf<Selector>()).also {
             selectors[key] = it
         }
@@ -29,11 +34,14 @@ class Stylesheet {
 
     fun putSelectorEntry(entry: SelectorEntry) {
         val key = entry.hashCode()
-        println("putSelectorEntry $key, sel=${entry.getSelectorEntry()}, ${selectorEntries[key]?.size}")
         val addedEntries = selectorEntries[key] ?: (mutableListOf<SelectorEntry>()).also {
             selectorEntries[key] = it
         }
         addedEntries.add(entry)
     }
 
+    fun getStatisticInfo(): String {
+        val allF = max(allTime.toFloat(), 1f)
+        return "time: all=$allTime, style=$mainTime(${mainTime / allF}), selector=$selectorTime(${selectorTime / allF}), body=$attrTime(${attrTime / allF})"
+    }
 }
