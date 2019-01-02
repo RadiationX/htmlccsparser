@@ -1,3 +1,5 @@
+package dom
+
 import java.util.regex.Matcher
 
 fun String.trimWhiteSpace(): String {

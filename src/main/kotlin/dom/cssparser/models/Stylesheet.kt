@@ -1,3 +1,5 @@
+package dom.cssparser.models
+
 import kotlin.math.max
 
 class Stylesheet {
@@ -8,11 +10,11 @@ class Stylesheet {
     val allTime
         get() = mainTime + selectorTime + attrTime
 
-    val cascades = mutableListOf<Cascade>()
-    val selectors = mutableMapOf<Int, MutableList<Selector>>()
-    val selectorEntries = mutableMapOf<Int, MutableList<SelectorEntry>>()
+    val cascades = mutableListOf<CssCascade>()
+    val selectors = mutableMapOf<Int, MutableList<CssSelector>>()
+    val selectorEntries = mutableMapOf<Int, MutableList<CssSelectorEntry>>()
 
-    fun putCascades(cascades: List<Cascade>) {
+    fun putCascades(cascades: List<CssCascade>) {
         this.cascades.addAll(cascades)
         cascades.forEach { cascade ->
             cascade.selectors.forEach { selector ->
@@ -24,17 +26,17 @@ class Stylesheet {
         }
     }
 
-    fun putSelector(selector: Selector) {
+    fun putSelector(selector: CssSelector) {
         val key = selector.hashCode()
-        val addedSelectors = selectors[key] ?: (mutableListOf<Selector>()).also {
+        val addedSelectors = selectors[key] ?: (mutableListOf<CssSelector>()).also {
             selectors[key] = it
         }
         addedSelectors.add(selector)
     }
 
-    fun putSelectorEntry(entry: SelectorEntry) {
+    fun putSelectorEntry(entry: CssSelectorEntry) {
         val key = entry.hashCode()
-        val addedEntries = selectorEntries[key] ?: (mutableListOf<SelectorEntry>()).also {
+        val addedEntries = selectorEntries[key] ?: (mutableListOf<CssSelectorEntry>()).also {
             selectorEntries[key] = it
         }
         addedEntries.add(entry)

@@ -1,10 +1,12 @@
-class Selector {
+package dom.cssparser.models
+
+class CssSelector {
 
     @JvmField
-    var cascade: Cascade? = null
-    val entries = mutableListOf<SelectorEntry>()
+    var cascade: CssCascade? = null
+    val entries = mutableListOf<CssSelectorEntry>()
 
-    fun addEntry(entry: SelectorEntry) {
+    fun addEntry(entry: CssSelectorEntry) {
         entry.parent = this
         entries.add(entry)
     }
@@ -20,7 +22,7 @@ class Selector {
         if (other === this) {
             return true
         }
-        (other as? Selector)?.also { otherSelector ->
+        (other as? CssSelector)?.also { otherSelector ->
             if (entries.size != otherSelector.entries.size) {
                 return false
             }

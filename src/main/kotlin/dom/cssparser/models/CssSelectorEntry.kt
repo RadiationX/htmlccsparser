@@ -1,8 +1,10 @@
-class SelectorEntry {
+package dom.cssparser.models
+
+class CssSelectorEntry {
     @JvmField
-    var parent: Selector? = null
+    var parent: CssSelector? = null
     @JvmField
-    var withSpecify: Specify = Specify.DEFAULT
+    var withSpecify: CssSpecify = CssSpecify.DEFAULT
     @JvmField
     var withNodeTag: String? = null
     @JvmField
@@ -37,7 +39,7 @@ class SelectorEntry {
 
     fun getSelectorEntry(): String {
         val specify = when (withSpecify) {
-            Specify.DEFAULT -> withSpecify.text
+            CssSpecify.DEFAULT -> withSpecify.text
             else -> "${withSpecify.text} "
         }
         val nodeTag = withNodeTag ?: ""
@@ -62,7 +64,7 @@ class SelectorEntry {
         if (other === this) {
             return true
         }
-        (other as? SelectorEntry)?.also { otherEntry ->
+        (other as? CssSelectorEntry)?.also { otherEntry ->
             if ((withClasses?.size ?: 0) != (otherEntry.withClasses?.size ?: 0)) {
                 return false
             }

@@ -1,6 +1,8 @@
-class Cascade(
+package dom.cssparser.models
+
+class CssCascade(
     @JvmField
-    val selectors: List<Selector>,
+    val selectors: List<CssSelector>,
     @JvmField
     val attributes: Map<String, String> = emptyMap()
 ) {

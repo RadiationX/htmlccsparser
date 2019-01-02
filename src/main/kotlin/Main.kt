@@ -1,14 +1,13 @@
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import dom.cssparser.CssParserTask
+import dom.cssparser.models.Stylesheet
 import java.io.File
-import java.lang.Exception
 import java.util.*
 
 fun main(args: Array<String>) {
     println("Hello, world!")
-    val text = File(Thread.currentThread().contextClassLoader.getResource("kekolol.txt").file).readText()
+    val text = Utils.loadFile("kekolol.txt")
     println(Thread.currentThread())
-    RxCssParserTask(text).parse(object : CssParserTask.StylesheetCallback {
+    CssParserTask(text).parse(object : CssParserTask.StylesheetCallback {
         override fun onSuccess(stylesheet: Stylesheet) {
             println(Thread.currentThread())
             println("onSuccess")
