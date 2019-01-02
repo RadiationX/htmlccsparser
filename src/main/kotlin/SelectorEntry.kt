@@ -57,4 +57,51 @@ class SelectorEntry {
         val pseudo = withPseudo?.joinToString("") { ":$it" }
         return "spec='$specify', tag='$nodeTag', id='$nodeId', class='$classes', attr='$attributes', pseudo='$pseudo'"
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) {
+            return true
+        }
+        (other as? SelectorEntry)?.also { otherEntry ->
+            if ((withClasses?.size ?: 0) != (otherEntry.withClasses?.size ?: 0)) {
+                return false
+            }
+            if ((withAttributes?.size ?: 0) != (otherEntry.withAttributes?.size ?: 0)) {
+                return false
+            }
+            if ((withPseudo?.size ?: 0) != (otherEntry.withPseudo?.size ?: 0)) {
+                return false
+            }
+            if (withSpecify != otherEntry.withSpecify) {
+                return false
+            }
+            if (withNodeTag != otherEntry.withNodeTag) {
+                return false
+            }
+            if (withNodeId != otherEntry.withNodeId) {
+                return false
+            }
+            if (withClasses?.all { otherEntry.withClasses?.contains(it) == true } == false) {
+                return false
+            }
+            if (withAttributes?.all { otherEntry.withAttributes?.contains(it) == true } == false) {
+                return false
+            }
+            if (withPseudo?.all { otherEntry.withPseudo?.contains(it) == true } == false) {
+                return false
+            }
+            return true
+        }
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        var result = withSpecify.hashCode()
+        result = 31 * result + (withNodeTag?.hashCode() ?: 0)
+        result = 31 * result + (withNodeId?.hashCode() ?: 0)
+        result = 31 * result + (withClasses?.hashCode() ?: 0)
+        result = 31 * result + (withAttributes?.hashCode() ?: 0)
+        result = 31 * result + (withPseudo?.hashCode() ?: 0)
+        return result
+    }
 }

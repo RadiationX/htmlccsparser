@@ -1,7 +1,5 @@
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.math.max
-import kotlin.math.min
 
 class CssParser {
 
@@ -53,10 +51,10 @@ class CssParser {
         println("Hello from parser")
         //testStylesheet()
         //testSelector()
-
-        (0 until 10).forEach {
+        testall()
+        /*(0 until 10).forEach {
             testall()
-        }
+        }*/
     }
 
 
@@ -64,16 +62,27 @@ class CssParser {
         stylesheetTime = 0
         selectorTime = 0
         bodyTime = 0
-        val styleSheet = parseStylesheet(String(bytesss))
-        val cascades = styleSheet.map {
+        val cssSource = parseStylesheet(testCss1)
+        val cascades = cssSource.map {
             val selectors = parseSelector(it.key)
             val attrs = parseBody(it.value)
             Cascade(selectors, attrs)
         }
+        val stylesheet = Stylesheet()
+        stylesheet.putCascades(cascades)
+
         val allTime = stylesheetTime + selectorTime + bodyTime
         val allF = max(allTime.toFloat(), 1f)
         println("time: all=$allTime, style=$stylesheetTime(${stylesheetTime / allF}), selector=$selectorTime(${selectorTime / allF}), body=$bodyTime(${bodyTime / allF})")
-
+        println("stylesheet ${stylesheet.selectors.size}, ${stylesheet.selectorEntries.size}")
+        println("\nselectors")
+        stylesheet.selectors.forEach {
+            println("  ${it.key} => ${it.value.size}")
+        }
+        println("\nentries")
+        stylesheet.selectorEntries.forEach {
+            println("  ${it.key} => ${it.value.size}")
+        }
         /*cascades.forEach {
             println(it.getData())
         }*/
@@ -93,7 +102,23 @@ class CssParser {
                     "[style*=\"color:#000000\"],\n" +
                     "[style*=\"color:black\"] *"
         val selectors = parseSelector(lel)
+        val selectors1 = parseSelector(lel)
+        val selectors2 = parseSelector(lel)
 
+        val lal = selectors.plus(selectors1).plus(selectors2)
+        val kek = mutableMapOf<Int, List<Selector>>()
+        println("${selectors.get(0) == selectors1.get(0)}")
+        println("${selectors.get(0) == selectors1.get(1)}")
+        println("${selectors.get(0) == selectors2.get(0)}")
+
+        lal.forEach {
+            kek[it.hashCode()] = kek[it.hashCode()]?.plus(it) ?: listOf(it)
+            println("${it.hashCode()}")
+        }
+
+        kek.forEach {
+            println("${it.key} -> ${it.value.size}")
+        }
         println("$lel")
         println("parsed:")
         selectors.forEach {
