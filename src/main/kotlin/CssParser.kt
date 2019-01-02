@@ -1,5 +1,7 @@
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import kotlin.math.max
+import kotlin.math.min
 
 class CssParser {
 
@@ -45,26 +47,36 @@ class CssParser {
     var bodyTime = 0L
     var selectorTime = 0L
 
+    val bytesss = testCss1.toByteArray()
+
     init {
         println("Hello from parser")
         //testStylesheet()
         //testSelector()
 
-        val styleSheet = parseStylesheet(testCss1)
+        (0 until 10).forEach {
+            testall()
+        }
+    }
 
 
+    fun testall() {
+        stylesheetTime = 0
+        selectorTime = 0
+        bodyTime = 0
+        val styleSheet = parseStylesheet(String(bytesss))
         val cascades = styleSheet.map {
             val selectors = parseSelector(it.key)
             val attrs = parseBody(it.value)
             Cascade(selectors, attrs)
         }
         val allTime = stylesheetTime + selectorTime + bodyTime
-        val allF = allTime.toFloat()
+        val allF = max(allTime.toFloat(), 1f)
         println("time: all=$allTime, style=$stylesheetTime(${stylesheetTime / allF}), selector=$selectorTime(${selectorTime / allF}), body=$bodyTime(${bodyTime / allF})")
 
-        cascades.forEach {
+        /*cascades.forEach {
             println(it.getData())
-        }
+        }*/
     }
 
     private fun testStylesheet() {
