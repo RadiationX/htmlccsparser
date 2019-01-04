@@ -95,9 +95,14 @@ class Dom {
 
         println("\n\nCHECK CASCADES")
         domNodes.forEach {
-            println("node = ${getDomNodePrint(it)}")
-            println("cascades: \n${it.cascades.joinToString("\n") { it.getData() }}")
-            println("activeAttrs: \n${it.activeCssAttributes.joinToString("\n") { "${it.name}: ${it.rawValue};" }}")
+            println("${getDomNodePrint(it)}")
+            val selectors = mutableListOf<CssSelector>()
+            it.cascades.forEach {
+                selectors.addAll(it.selectors)
+            }
+            val selectorStr = it.cascades.joinToString(";\n") { it.selectors.joinToString(",\n") { it.getData() } }
+            val attrsStr = it.activeCssAttributes.toList().joinToString("\n") { "    ${it.name}: ${it.rawValue};" }
+            println("$selectorStr {\n$attrsStr\n}")
             println()
             println()
         }
@@ -107,11 +112,18 @@ class Dom {
         val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
         stylesheet.selectors.forEach {
             val selectors = it.value
-            println("\n\nfill selectors ${selectors.size}")
-            selectors.forEach { selector ->
-                println("fill selector '${selector.getData()}'")
+            //println("\n\nfill selectors ${selectors.size}")
+            for (selector in selectors) {
+                //println("fill selector '${selector.getData()}'")
+                val entries = selector.entries
+                val anchorEntry = entries.lastOrNull { !it.isOnlyPseudo() }
+                val anchorHasPseudo = anchorEntry?.withPseudo != null
+                val anchorNextHasPseudo = anchorEntry?.next?.withPseudo != null
+                if (anchorEntry == null || anchorHasPseudo || anchorNextHasPseudo) {
+                    continue
+                }
                 domNodes.forEach { domNode ->
-                    val cascade = tryFillCascadeBySelector(selector, domNode)
+                    val cascade = tryFillCascadeBySelector(anchorEntry, selector, domNode)
                     if (cascade != null) {
                         val list = cascadesBatch[domNode] ?: (mutableListOf<CssCascade>()).also {
                             cascadesBatch[domNode] = it
@@ -126,14 +138,17 @@ class Dom {
         }
     }
 
-    private fun tryFillCascadeBySelector(selector: CssSelector, domNode: DomNode): CssCascade? {
-        val entries = selector.entries
-        val lastEntry = entries.lastOrNull { !it.isOnlyPseudo() }
-        var checkResult = lastEntry?.let { checkEntry(it, domNode) } ?: false
+    private fun tryFillCascadeBySelector(
+        anchorEntry: CssSelectorEntry,
+        selector: CssSelector,
+        domNode: DomNode
+    ): CssCascade? {
+
+        var checkResult = checkEntry(anchorEntry, domNode)
 
         if (checkResult) {
             var prevCheck = true
-            var prevEntry = lastEntry?.prev
+            var prevEntry = anchorEntry.prev
             var checkNode: DomNode? = domNode
             while (prevEntry != null && checkNode != null && prevCheck) {
                 if (!prevEntry.isOnlyPseudo()) {
@@ -238,7 +253,7 @@ class Dom {
         }
 
         if (entryNodeTag != null && currentAccept) {
-            currentAccept = htmlNode.name == entryNodeTag
+            currentAccept = htmlNode.name == entryNodeTag || entryNodeTag == "*"
         }
 
         if (entryClasses != null && currentAccept) {
@@ -278,7 +293,7 @@ class Dom {
     }
 
     private fun getDomNodePrint(node: DomNode): String {
-        return "<${node.htmlNode.name} ${node.htmlNode.attributes?.toList()?.joinToString { "${it.first}=\"${it.second}\"" }
-            ?: ""}>"
+        val attrs = node.htmlNode.attributes?.toList()?.joinToString { "${it.first}=\"${it.second}\"" }
+        return "<${node.htmlNode.name}${attrs?.let { " $it" } ?: ""}>"
     }
 }
