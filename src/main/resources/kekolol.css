@@ -35,7 +35,8 @@ body {
 .inside + .rules_list{
   background: #ffff00;
 }
-.inside ~ .rules_list{
+.inside ~ .rules_list,
+.item ~ .item.header{
   background: #ffff00;
 }
 

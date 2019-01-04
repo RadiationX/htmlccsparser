@@ -4,7 +4,7 @@ import dom.cssparser.models.Stylesheet
 class CssTester {
 
     init {
-        val text = Utils.loadFile("kekolol.txt")
+        val text = Utils.loadFile("kekolol.css")
         println(Thread.currentThread())
         CssParserTask(text).parse(object : CssParserTask.StylesheetCallback {
             override fun onSuccess(stylesheet: Stylesheet) {

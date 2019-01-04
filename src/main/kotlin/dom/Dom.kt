@@ -15,7 +15,7 @@ import io.reactivex.subjects.BehaviorSubject
 class Dom {
 
     init {
-        val cssSrc = Utils.loadFile("kekolol.txt")
+        val cssSrc = Utils.loadFile("kekolol.css")
         val htmlSrc = Utils.loadFile("test.html")
         val cssObs = BehaviorSubject.create<Stylesheet>()
         val htmlObs = BehaviorSubject.create<HtmlDocument>()
@@ -64,10 +64,10 @@ class Dom {
         val domNodes = allDomNodes.filter { !HtmlHelper.isNotElement(it.htmlNode) }
         println("onparsed domnodes = ${domNodes.size}")
         println("onparsed stylesheet = ${stylesheet.cascades.size}, ${stylesheet.selectors.size}, ${stylesheet.selectorEntries.size}")
-        println("\ndomnodes")
+        /*println("\ndomnodes")
         domNodes.forEach {
             println(getDomNodePrint(it))
-        }
+        }*/
         println("\ncascades")
         stylesheet.cascades.forEach {
             println(it.getData())
@@ -84,17 +84,17 @@ class Dom {
         println("\n\nFILL CASCADES")
         val time = System.currentTimeMillis()
         fillCascadesBySelector(stylesheet, domNodes)
-        //println("fill time = ${System.currentTimeMillis() - time}")
+        println("fill time = ${System.currentTimeMillis() - time}")
 
 
-        println("\n\nCHECK CASCADES")
+/*        println("\n\nCHECK CASCADES")
         domNodes.forEach {
             println("node = ${getDomNodePrint(it)}")
             println("cascades: \n${it.cascades.joinToString("\n") { it.getData() }}")
             println("activeAttrs: \n${it.activeCssAttributes.joinToString("\n") { "${it.name}: ${it.rawValue};" }}")
             println()
             println()
-        }
+        }*/
     }
 
     private fun fillCascadesBySelector(stylesheet: Stylesheet, domNodes: List<DomNode>) {
