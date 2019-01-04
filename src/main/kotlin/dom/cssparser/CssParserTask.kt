@@ -50,16 +50,18 @@ open class CssParserTask(
 
         /* Patterns */
         private const val stylesheet =
-            "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-\\\"\\'\\^]+)\\{([^\\}]+)?\\}"
+            "(\\/\\*[\\s\\S]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-\\\"\\'\\^]+)\\{([^\\}]+)?\\}"
         private const val selector =
             "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)((?:[\\w\\-]+\\([^\\)]+\\))|[\\w\\-]+)|([\\>\\~\\+])|([, ])"
-        private const val selectorAttr = "^([\\w\\-]+)(?:([\\~\\|\\^\\\$\\*]?)=(['\"])?([\\w\\-]+)(\\3)?\$)?"
+        private const val selectorAttr = "^([\\w\\-]+)(?:([\\~\\|\\^\\\$\\*]?)=(['\"])?([\\s\\S][^\"']+)(\\3)?\$)?"
         private const val attribute = "([\\w-]+):([^;]*(\\!important)?[^;]*);"
+        private const val attrCommentClean = "\\/\\/[^\\n\$]+|\\/\\*[\\s\\S]*?\\*\\/"
 
         private val styleSheetPattern = Pattern.compile(stylesheet)
         private val selectorPattern = Pattern.compile(selector)
         private val selectorAttrPattern = Pattern.compile(selectorAttr)
         private val attributePattern = Pattern.compile(attribute)
+        private val attrCommentCleatPattern = Pattern.compile(attrCommentClean)
 
         /* Default */
         private var defaultMainCallable: MainCallable = object :
@@ -289,7 +291,8 @@ open class CssParserTask(
 
     private fun parseAttrs(attrsSrc: String): List<CssAttribute> {
         val time = System.nanoTime()
-        val matcherSrc = attributePattern.matcher(attrsSrc)
+        val cleaned = attrCommentCleatPattern.matcher(attrsSrc).replaceAll("")
+        val matcherSrc = attributePattern.matcher(cleaned)
         val result = mutableListOf<CssAttribute>()
         matcherSrc.findAll {
             val nameSrc = it.group(ATTR_NAME)

@@ -60,14 +60,13 @@ class Dom {
     private val domNodesMap = mutableMapOf<HtmlNode, DomNode>()
 
     private fun onParsed(stylesheet: Stylesheet, htmlDocument: HtmlDocument) {
-        val allHtmlNodes = HtmlHelper
-            .getAllNodesList(htmlDocument.root, true)
-        val allDomNodes = allHtmlNodes.map { DomNode(it) }
+        val allDomNodes = htmlDocument.allNodes.map { DomNode(it) }
         allDomNodes.forEach {
             domNodesMap[it.htmlNode] = it
         }
         val domNodes = allDomNodes.filter { !HtmlHelper.isNotElement(it.htmlNode) }
         println("onparsed domnodes = ${domNodes.size}")
+        println("onparsed dom = ${htmlDocument.getInfo()}")
         println("onparsed dom = ${htmlDocument.getStatisticInfo()}")
         println("onparsed stylesheet = ${stylesheet.cascades.size}, ${stylesheet.selectors.size}, ${stylesheet.selectorEntries.size}")
         println("onparsed ss = ${stylesheet.getStatisticInfo()}")
@@ -94,23 +93,23 @@ class Dom {
         println("fill time = ${System.currentTimeMillis() - time}")
 
 
-/*        println("\n\nCHECK CASCADES")
+        println("\n\nCHECK CASCADES")
         domNodes.forEach {
             println("node = ${getDomNodePrint(it)}")
             println("cascades: \n${it.cascades.joinToString("\n") { it.getData() }}")
             println("activeAttrs: \n${it.activeCssAttributes.joinToString("\n") { "${it.name}: ${it.rawValue};" }}")
             println()
             println()
-        }*/
+        }
     }
 
     private fun fillCascadesBySelector(stylesheet: Stylesheet, domNodes: List<DomNode>) {
         val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
         stylesheet.selectors.forEach {
             val selectors = it.value
-            //println("\n\nfill selectors ${selectors.size}")
+            println("\n\nfill selectors ${selectors.size}")
             selectors.forEach { selector ->
-                //println("fill selector '${selector.getData()}'")
+                println("fill selector '${selector.getData()}'")
                 domNodes.forEach { domNode ->
                     val cascade = tryFillCascadeBySelector(selector, domNode)
                     if (cascade != null) {

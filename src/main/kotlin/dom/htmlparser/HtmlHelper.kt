@@ -89,7 +89,7 @@ object HtmlHelper {
         withoutDocument: Boolean = false,
         result: MutableList<HtmlNode> = mutableListOf()
     ): List<HtmlNode> {
-        if (!withoutDocument || node.name == HtmlNode.NODE_DOCUMENT) {
+        if (!withoutDocument || node.name != HtmlNode.NODE_DOCUMENT) {
             result.add(node)
         }
         node.nodes?.forEach {

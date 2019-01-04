@@ -54,7 +54,7 @@ class HtmlParser {
         var parsingTime = 0L
 
         val openedNodes = ArrayList<HtmlNode>()
-        val root = HtmlNode()
+        val root = HtmlNode(HtmlNode.NODE_DOCUMENT)
         val doc = HtmlDocument(root)
 
         openedNodes.add(root)
@@ -151,6 +151,7 @@ class HtmlParser {
         parsingTime += System.nanoTime() - startTime
 
         doc.unclosedTags.addAll(openedNodes)
+        doc.allNodes.addAll(HtmlHelper.getAllNodesList(doc.root, true))
         doc.nodesAdded = nodesAdd
         doc.nodesClosed = nodesClose
         doc.parsingTime = parsingTime
