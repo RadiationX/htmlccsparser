@@ -6,6 +6,6 @@ class HtmlTester {
     init {
         val text = Utils.loadFile("test.html")
         val doc = HtmlParser().parse(text)
-        println(HtmlHelper.getHtml(doc, false))
+        println(HtmlHelper.getHtml(doc.root, false))
     }
 }

@@ -1,5 +1,6 @@
 package dom.cssparser.models
 
+import dom.format
 import kotlin.math.max
 
 class Stylesheet {
@@ -43,7 +44,13 @@ class Stylesheet {
     }
 
     fun getStatisticInfo(): String {
-        val allF = max(allTime.toFloat(), 1f)
-        return "time: all=$allTime, style=$mainTime(${mainTime / allF}), selector=$selectorTime(${selectorTime / allF}), body=$attrTime(${attrTime / allF})"
+        val allTimeMillis = allTime / 1000000.0
+        val mainTimeMillis = mainTime / 1000000.0
+        val selectorTimeMillis = selectorTime / 1000000.0
+        val attrTimeMillis = attrTime / 1000000.0
+
+
+        val allF = max(allTimeMillis, 1.0)
+        return "time: all=${allTimeMillis.format(2)}, style=${mainTimeMillis.format(2)}ms(${(mainTimeMillis / allF).format(2)}%), selector=${selectorTimeMillis.format(2)}ms(${(selectorTimeMillis / allF).format(2)}%), body=${attrTimeMillis.format(2)}ms(${(attrTimeMillis / allF).format(2)}%)"
     }
 }

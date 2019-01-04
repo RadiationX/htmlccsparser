@@ -89,7 +89,7 @@ object HtmlHelper {
         withoutDocument: Boolean = false,
         result: MutableList<HtmlNode> = mutableListOf()
     ): List<HtmlNode> {
-        if (!withoutDocument || node !is HtmlDocument) {
+        if (!withoutDocument || node.name == HtmlNode.NODE_DOCUMENT) {
             result.add(node)
         }
         node.nodes?.forEach {
@@ -112,9 +112,9 @@ object HtmlHelper {
             if (node.attributes != null) {
 
             } else {
-                if (node.name.equals(HtmlDocument.DOCTYPE_TAG, ignoreCase = true)) {
+                /*if (node.name.equals(HtmlDocument.DOCTYPE_TAG, ignoreCase = true)) {
                     resultHtml.append(" ").append(document.docType)
-                }
+                }*/
             }
             resultHtml.append(">")
         }

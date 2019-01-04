@@ -175,7 +175,7 @@ open class CssParserTask(
     }
 
     private fun parseStylesheet(cssSource: String): List<ParserCascade> {
-        val time = System.currentTimeMillis()
+        val time = System.nanoTime()
         val matcher = styleSheetPattern.matcher(cssSource)
         val result = mutableListOf<ParserCascade>()
         matcher.findAll {
@@ -188,12 +188,12 @@ open class CssParserTask(
                 result.add(ParserCascade(selector, attrs))
             }
         }
-        mainTime += (System.currentTimeMillis() - time)
+        mainTime += (System.nanoTime() - time)
         return result
     }
 
     private fun parseSelector(selectorSrc: String): List<CssSelector> {
-        val time = System.currentTimeMillis()
+        val time = System.nanoTime()
         val matcherSrc = selectorPattern.matcher(selectorSrc)
 
         var currentEntry = CssSelectorEntry()
@@ -262,7 +262,7 @@ open class CssParserTask(
         }
 
 
-        val currentTime = (System.currentTimeMillis() - time)
+        val currentTime = (System.nanoTime() - time)
         selectorTime += currentTime
         return selectors
     }
@@ -288,7 +288,7 @@ open class CssParserTask(
     }
 
     private fun parseAttrs(attrsSrc: String): List<CssAttribute> {
-        val time = System.currentTimeMillis()
+        val time = System.nanoTime()
         val matcherSrc = attributePattern.matcher(attrsSrc)
         val result = mutableListOf<CssAttribute>()
         matcherSrc.findAll {
@@ -302,7 +302,7 @@ open class CssParserTask(
                 it.important = importantSrc != null
             })
         }
-        attrTime += (System.currentTimeMillis() - time)
+        attrTime += (System.nanoTime() - time)
         return result
     }
 

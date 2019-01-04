@@ -50,8 +50,12 @@ class HtmlParser {
     }
 
     fun parse(html: String): HtmlDocument {
+        var attributesTime = 0L
+        var parsingTime = 0L
+
         val openedNodes = ArrayList<HtmlNode>()
-        val root = HtmlDocument()
+        val root = HtmlNode()
+        val doc = HtmlDocument(root)
 
         openedNodes.add(root)
         var lastOpened: HtmlNode? = null
@@ -60,9 +64,11 @@ class HtmlParser {
         var attrMatcher: Matcher? = null
         var nodesAdd = 0
         var nodesClose = 0
+
+        val startTime = System.nanoTime()
         while (matcher.find()) {
             lastOpened = openedNodes[openedNodes.size - 1]
-            val node = HtmlNode()
+            val node = HtmlNode(HtmlNode.NODE_UNKNOWN)
 
 
             var special = false
@@ -94,16 +100,15 @@ class HtmlParser {
                     node.name = tagName
 
                     if (attrs != null) {
+                        val startTimeAttr = System.nanoTime()
                         attrMatcher = getMatcher(attrMatcher, attrPattern, attrs)
                         while (attrMatcher.find()) {
                             node.putAttribute(attrMatcher.group(1), attrMatcher.group(3))
                         }
+                        attributesTime += System.nanoTime() - startTimeAttr
                     }
 
                     if (HtmlHelper.isUnclosing(tagName)) {
-                        if (tagName.equals(HtmlDocument.DOCTYPE_TAG, ignoreCase = true)) {
-                            root.docType = attrs
-                        }
                         addToOpened = false
                     }
 
@@ -143,10 +148,14 @@ class HtmlParser {
 
         }
         openedNodes.remove(root)
+        parsingTime += System.nanoTime() - startTime
 
-        println("FINAL OPENED " + openedNodes.size + " : " + nodesAdd + " : " + nodesClose);
-
-        return root
+        doc.unclosedTags.addAll(openedNodes)
+        doc.nodesAdded = nodesAdd
+        doc.nodesClosed = nodesClose
+        doc.parsingTime = parsingTime
+        doc.attrTime = attributesTime
+        return doc
     }
 
 }

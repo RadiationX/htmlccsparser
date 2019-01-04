@@ -40,6 +40,7 @@ open class HtmlNode {
     }
 
     companion object {
+        val NODE_UNKNOWN = "!!unknown"
         val NODE_DOCUMENT = "#document"
         val NODE_TEXT = "#text"
         val NODE_COMMENT = "#comment"

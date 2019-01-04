@@ -61,19 +61,21 @@ class Dom {
 
     private fun onParsed(stylesheet: Stylesheet, htmlDocument: HtmlDocument) {
         val allHtmlNodes = HtmlHelper
-            .getAllNodesList(htmlDocument, true)
+            .getAllNodesList(htmlDocument.root, true)
         val allDomNodes = allHtmlNodes.map { DomNode(it) }
         allDomNodes.forEach {
             domNodesMap[it.htmlNode] = it
         }
         val domNodes = allDomNodes.filter { !HtmlHelper.isNotElement(it.htmlNode) }
         println("onparsed domnodes = ${domNodes.size}")
+        println("onparsed dom = ${htmlDocument.getStatisticInfo()}")
         println("onparsed stylesheet = ${stylesheet.cascades.size}, ${stylesheet.selectors.size}, ${stylesheet.selectorEntries.size}")
+        println("onparsed ss = ${stylesheet.getStatisticInfo()}")
         /*println("\ndomnodes")
         domNodes.forEach {
             println(getDomNodePrint(it))
         }*/
-        println("\ncascades")
+        /*println("\ncascades")
         stylesheet.cascades.forEach {
             println(it.getData())
         }
@@ -84,7 +86,7 @@ class Dom {
         println("\nentries")
         stylesheet.selectorEntries.forEach {
             println("  ${it.key} => ${it.value.size}: ${it.value.joinToString { it.getSelectorEntry() }}")
-        }
+        }*/
 
         println("\n\nFILL CASCADES")
         val time = System.currentTimeMillis()
@@ -106,9 +108,9 @@ class Dom {
         val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
         stylesheet.selectors.forEach {
             val selectors = it.value
-            println("\n\nfill selectors ${selectors.size}")
+            //println("\n\nfill selectors ${selectors.size}")
             selectors.forEach { selector ->
-                println("fill selector '${selector.getData()}'")
+                //println("fill selector '${selector.getData()}'")
                 domNodes.forEach { domNode ->
                     val cascade = tryFillCascadeBySelector(selector, domNode)
                     if (cascade != null) {
@@ -147,7 +149,7 @@ class Dom {
         if (checkResult) {
 
             //println("tryFillCascadeByEntry")
-            println("accept: ${getDomNodePrint(domNode)}")
+            //println("accept: ${getDomNodePrint(domNode)}")
             //println()
             return selector.cascade
         }
