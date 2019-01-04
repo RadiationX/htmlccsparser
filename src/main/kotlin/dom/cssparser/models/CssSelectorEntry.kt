@@ -88,7 +88,7 @@ class CssSelectorEntry {
         return "spec='$specify', tag='$nodeTag', id='$nodeId', class='$classes', attr='$attributes', pseudo='$pseudo'"
     }
 
-    override fun equals(other: Any?): Boolean {
+  /*  override fun equals(other: Any?): Boolean {
         if (other === this) {
             return true
         }
@@ -114,7 +114,8 @@ class CssSelectorEntry {
             if (withClasses?.all { otherEntry.withClasses?.contains(it) == true } == false) {
                 return false
             }
-            if (withAttributes?.all { otherEntry.withAttributes?.contains(it) == true } == false) {
+            val attrsSize = withAttributes?.size ?: 0
+            if ((0 until attrsSize).all { withAttributes?.get(it) == otherEntry.withAttributes?.get(it) }) {
                 return false
             }
             if (withPseudo?.all { otherEntry.withPseudo?.contains(it) == true } == false) {
@@ -123,6 +124,26 @@ class CssSelectorEntry {
             return true
         }
         return super.equals(other)
+    }*/
+
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CssSelectorEntry
+
+        if (parent != other.parent) return false
+        if (prev != other.prev) return false
+        if (next != other.next) return false
+        if (withSpecify != other.withSpecify) return false
+        if (withNodeTag != other.withNodeTag) return false
+        if (withNodeId != other.withNodeId) return false
+        if (withClasses != other.withClasses) return false
+        if (withAttributes != other.withAttributes) return false
+        if (withPseudo != other.withPseudo) return false
+
+        return true
     }
 
     override fun hashCode(): Int {

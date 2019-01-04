@@ -20,8 +20,8 @@ class Dom {
     }
 
     init {
-        val cssSrc = Utils.loadFile("simple.css")
-        val htmlSrc = Utils.loadFile("simple.html")
+        val cssSrc = Utils.loadFile("kekolol.css")
+        val htmlSrc = Utils.loadFile("test.html")
         val cssObs = BehaviorSubject.create<Stylesheet>()
         val htmlObs = BehaviorSubject.create<HtmlDocument>()
 
