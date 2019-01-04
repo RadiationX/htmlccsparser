@@ -41,7 +41,7 @@ open class CssParserTask(
             "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-]+)\\{([^\\}]+)\\}"
         private const val selector =
             "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)((?:[\\w\\-]+\\([^\\)]+\\))|[\\w\\-]+)|([\\>\\~\\+])|([, ])"
-        private const val attribute = "([\\w-]+):([^;]*(\\!important)[^;]*);"
+        private const val attribute = "([\\w-]+):([^;]*(\\!important)?[^;]*);"
 
         private val styleSheetPattern = Pattern.compile(stylesheet)
         private val selectorPattern = Pattern.compile(selector)

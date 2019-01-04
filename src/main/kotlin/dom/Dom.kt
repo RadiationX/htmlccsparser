@@ -1,10 +1,7 @@
 package dom
 
 import dom.cssparser.CssParserTask
-import dom.cssparser.models.CssSelector
-import dom.cssparser.models.CssSelectorEntry
-import dom.cssparser.models.CssSpecify
-import dom.cssparser.models.Stylesheet
+import dom.cssparser.models.*
 import dom.htmlparser.HtmlDocument
 import dom.htmlparser.HtmlHelper
 import dom.htmlparser.HtmlNode
@@ -71,6 +68,10 @@ class Dom {
         domNodes.forEach {
             println(getDomNodePrint(it))
         }
+        println("\ncascades")
+        stylesheet.cascades.forEach {
+            println(it.getData())
+        }
         println("\nselectors")
         stylesheet.selectors.forEach {
             println("  ${it.key} => ${it.value.size}: ${it.value.joinToString { it.getData() }}")
@@ -81,28 +82,48 @@ class Dom {
         }
 
         println("\n\nFILL CASCADES")
+        val time = System.currentTimeMillis()
         fillCascadesBySelector(stylesheet, domNodes)
+        //println("fill time = ${System.currentTimeMillis() - time}")
+
+
+        println("\n\nCHECK CASCADES")
+        domNodes.forEach {
+            println("node = ${getDomNodePrint(it)}")
+            println("cascades: \n${it.cascades.joinToString("\n") { it.getData() }}")
+            println("activeAttrs: \n${it.activeCssAttributes.joinToString("\n") { "${it.name}: ${it.rawValue};" }}")
+            println()
+            println()
+        }
     }
 
     private fun fillCascadesBySelector(stylesheet: Stylesheet, domNodes: List<DomNode>) {
+        val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
         stylesheet.selectors.forEach {
             val selectors = it.value
             println("\n\nfill selectors ${selectors.size}")
             selectors.forEach { selector ->
                 println("fill selector '${selector.getData()}'")
                 domNodes.forEach { domNode ->
-                    tryFillCascadeBySelector(selector, domNode)
+                    val cascade = tryFillCascadeBySelector(selector, domNode)
+                    if (cascade != null) {
+                        val list = cascadesBatch[domNode] ?: (mutableListOf<CssCascade>()).also {
+                            cascadesBatch[domNode] = it
+                        }
+                        list.add(cascade)
+                    }
                 }
             }
         }
+        cascadesBatch.forEach {
+            it.key.putCascades(it.value)
+        }
     }
 
-    private fun tryFillCascadeBySelector(selector: CssSelector, domNode: DomNode) {
+    private fun tryFillCascadeBySelector(selector: CssSelector, domNode: DomNode): CssCascade? {
         val entries = selector.entries
         val lastEntry = entries.lastOrNull { !it.isPseudoOrAttribute() }
         var checkResult = lastEntry?.let { checkEntry(it, domNode) } ?: false
-
-
 
         if (checkResult) {
             var prevCheck = true
@@ -120,11 +141,12 @@ class Dom {
 
         if (checkResult) {
 
-
             //println("tryFillCascadeByEntry")
             println("accept: ${getDomNodePrint(domNode)}")
             //println()
+            return selector.cascade
         }
+        return null
     }
 
     private fun checkPrevEntry(entry: CssSelectorEntry, domNode: DomNode): DomNode? {
@@ -148,13 +170,7 @@ class Dom {
             }
             checkNode = checkNode.parent
         }
-        val result = domNodesMap[checkNode]
-        /*println("checkPrevEntryDefault: e='${entry.getSelectorEntry()}', '${getDomNodePrint(domNode)}'  => ${result?.let {
-            getDomNodePrint(
-                result
-            )
-        }}")*/
-        return result
+        return domNodesMap[checkNode]
     }
 
     private fun checkPrevEntryInside(entry: CssSelectorEntry, domNode: DomNode): DomNode? {
@@ -224,67 +240,6 @@ class Dom {
             }
         }
         return currentAccept
-    }
-
-
-    private fun fillCascadesByEntry(stylesheet: Stylesheet, domNodes: List<DomNode>) {
-        stylesheet.selectorEntries.forEach {
-            val entries = it.value
-            println("\nfill entries ${entries.size}")
-            entries.forEach { entry ->
-                println("fill entry ${entry.getSelectorEntry()}")
-                domNodes.forEach { domNode ->
-                    tryFillCascadeByEntry(entry, domNode)
-                }
-            }
-        }
-    }
-
-    private fun tryFillCascadeByEntry(entry: CssSelectorEntry, domNode: DomNode, level: Int = 0) {
-        val htmlNode = domNode.htmlNode
-        var currentAccept = false
-
-        when (entry.withSpecify) {
-            CssSpecify.DEFAULT -> {
-
-            }
-            CssSpecify.INSIDE -> {
-
-            }
-            CssSpecify.NEXT -> {
-
-            }
-            CssSpecify.ALL_NEXT -> {
-
-            }
-        }
-
-        entry.withNodeId?.also {
-            if (htmlNode.attributes?.get("id") == it) {
-                currentAccept = true
-            }
-        }
-        entry.withNodeTag?.also {
-            if (htmlNode.name == it) {
-                currentAccept = true
-            }
-        }
-        val nodeClasses = htmlNode.attributes?.get("class")
-        if (nodeClasses != null && entry.withClasses != null) {
-            if (entry.withClasses?.any { nodeClasses.contains(it) } == true) {
-                currentAccept = true
-            }
-        }
-        entry.next?.also {
-            if (!it.isPseudoOrAttribute()) {
-                currentAccept = false
-            }
-        }
-        if (currentAccept) {
-            println("tryFillCascadeByEntry, level=$level")
-            println("${entry.getSelectorEntry()} => ${getDomNodePrint(domNode)}")
-            println()
-        }
     }
 
     private fun getDomNodePrint(node: DomNode): String {
