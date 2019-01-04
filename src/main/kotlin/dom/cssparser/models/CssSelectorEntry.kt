@@ -17,7 +17,7 @@ class CssSelectorEntry {
     @JvmField
     var withClasses: MutableList<String>? = null
     @JvmField
-    var withAttributes: MutableList<String>? = null
+    var withAttributes: MutableList<CssSelectorAttribute>? = null
     @JvmField
     var withPseudo: MutableList<String>? = null
 
@@ -28,7 +28,7 @@ class CssSelectorEntry {
         withClasses?.add(data)
     }
 
-    fun addAttr(data: String) {
+    fun addAttr(data: CssSelectorAttribute) {
         if (withAttributes == null) {
             withAttributes = mutableListOf()
         }
@@ -73,7 +73,7 @@ class CssSelectorEntry {
         val nodeTag = withNodeTag ?: ""
         val nodeId = withNodeId ?: ""
         val classes = withClasses?.joinToString("") { ".$it" } ?: ""
-        val attributes = withAttributes?.joinToString("") { "[$it]" } ?: ""
+        val attributes = withAttributes?.joinToString("") { it.getData() } ?: ""
         val pseudo = withPseudo?.joinToString("") { ":$it" } ?: ""
         return "$specify$nodeTag$nodeId$classes$attributes$pseudo"
     }
@@ -83,7 +83,7 @@ class CssSelectorEntry {
         val nodeTag = withNodeTag
         val nodeId = withNodeId
         val classes = withClasses?.joinToString("") { ".$it" }
-        val attributes = withAttributes?.joinToString("") { "[$it]" }
+        val attributes = withAttributes?.joinToString("") { it.getData() }
         val pseudo = withPseudo?.joinToString("") { ":$it" }
         return "spec='$specify', tag='$nodeTag', id='$nodeId', class='$classes', attr='$attributes', pseudo='$pseudo'"
     }

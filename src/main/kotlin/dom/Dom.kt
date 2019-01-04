@@ -11,12 +11,17 @@ import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import java.util.regex.Pattern
 
 class Dom {
 
+    companion object {
+        private val startMultiplePattern = Pattern.compile("^(\\w+(?:[-][^\$]*)?)\$")
+    }
+
     init {
-        val cssSrc = Utils.loadFile("kekolol.css")
-        val htmlSrc = Utils.loadFile("test.html")
+        val cssSrc = Utils.loadFile("simple.css")
+        val htmlSrc = Utils.loadFile("simple.html")
         val cssObs = BehaviorSubject.create<Stylesheet>()
         val htmlObs = BehaviorSubject.create<HtmlDocument>()
 
@@ -122,7 +127,7 @@ class Dom {
 
     private fun tryFillCascadeBySelector(selector: CssSelector, domNode: DomNode): CssCascade? {
         val entries = selector.entries
-        val lastEntry = entries.lastOrNull { !it.isPseudoOrAttribute() }
+        val lastEntry = entries.lastOrNull { !it.isOnlyPseudo() }
         var checkResult = lastEntry?.let { checkEntry(it, domNode) } ?: false
 
         if (checkResult) {
@@ -130,7 +135,7 @@ class Dom {
             var prevEntry = lastEntry?.prev
             var checkNode: DomNode? = domNode
             while (prevEntry != null && checkNode != null && prevCheck) {
-                if (!prevEntry.isPseudoOrAttribute()) {
+                if (!prevEntry.isOnlyPseudo()) {
                     checkNode = checkPrevEntry(prevEntry, checkNode)
                     prevCheck = checkNode != null
                 }
@@ -221,24 +226,53 @@ class Dom {
 
     private fun checkEntry(entry: CssSelectorEntry, domNode: DomNode): Boolean {
         val htmlNode = domNode.htmlNode
-        var currentAccept = false
+        val entryNodeId = entry.withNodeId
+        val entryNodeTag = entry.withNodeTag
+        val entryClasses = entry.withClasses
+        val entryAttrs = entry.withAttributes
+        var currentAccept = true
 
-        entry.withNodeId?.also {
-            if (htmlNode.attributes?.get("id") == it) {
-                currentAccept = true
+        if (entryNodeId != null && currentAccept) {
+            currentAccept = htmlNode.attributes?.get("id") == entryNodeId
+        }
+
+        if (entryNodeTag != null && currentAccept) {
+            currentAccept = htmlNode.name == entryNodeTag
+        }
+
+        if (entryClasses != null && currentAccept) {
+            val nodeClasses = htmlNode.attributes?.get("class")
+            currentAccept = if (nodeClasses != null) {
+                entryClasses.all { nodeClasses.contains(it) }
+            } else {
+                false
             }
         }
-        entry.withNodeTag?.also {
-            if (htmlNode.name == it) {
-                currentAccept = true
+
+        if (entryAttrs != null && currentAccept) {
+            currentAccept = entryAttrs.all {
+                val nodeAttr = htmlNode.attributes?.get(it.key)
+                val attr = it.value.orEmpty()
+                if (nodeAttr != null) {
+                    when (it.type) {
+                        CssSelectorAttribute.Type.EQUALS -> nodeAttr == attr
+                        CssSelectorAttribute.Type.CONTAINS -> nodeAttr.contains(attr)
+                        CssSelectorAttribute.Type.CONTAINS_MULTIPLE -> nodeAttr.split(' ').contains(attr)
+                        CssSelectorAttribute.Type.START_WITH -> nodeAttr.startsWith(attr)
+                        CssSelectorAttribute.Type.START_MULTIPLE -> {
+                            startMultiplePattern.matcher(nodeAttr).mapOnce {
+                                it.group().contains(attr)
+                            } == true
+                        }
+                        CssSelectorAttribute.Type.END_WITH -> nodeAttr.endsWith(attr)
+                        null -> true
+                    }
+                } else {
+                    false
+                }
             }
         }
-        val nodeClasses = htmlNode.attributes?.get("class")
-        if (nodeClasses != null && entry.withClasses != null) {
-            if (entry.withClasses?.all { nodeClasses.contains(it) } == true) {
-                currentAccept = true
-            }
-        }
+
         return currentAccept
     }
 

@@ -2,6 +2,7 @@ package dom.cssparser
 
 import dom.cssparser.models.*
 import dom.findAll
+import dom.mapOnce
 import dom.trimWhiteSpace
 import java.util.regex.Pattern
 
@@ -23,6 +24,14 @@ open class CssParserTask(
         private const val SELECTOR_SPECIFY = 6
         private const val SELECTOR_DELIMITER = 7
 
+        private const val SELECTOR_ATTR_NAME = 1
+        private const val SELECTOR_ATTR_TYPE = 2
+        private const val SELECTOR_ATTR_VALUE = 4
+
+        private const val ATTR_NAME = 1
+        private const val ATTR_VALUE = 2
+        private const val ATTR_MARKER_IMPORTANT = 3
+
         private const val ELEM_MARKER_CLASS = "."
         private const val ELEM_MARKER_ID = "#"
         private const val ELEM_NAME_ALL = "*"
@@ -32,19 +41,24 @@ open class CssParserTask(
         private const val DELIMITER_SELECTOR = ","
         private const val DELIMITER_ENTRY = " "
 
-        private const val ATTR_NAME = 1
-        private const val ATTR_VALUE = 2
-        private const val ATTR_MARKER_IMPORTANT = 3
+        private val ATTR_EQUALS = ""
+        private val ATTR_CONTAINS = "*"
+        private val ATTR_CONTAINS_MULTIPLE = "~"
+        private val ATTR_START_WITH = "^"
+        private val ATTR_START_MULTIPLE = "|"
+        private val ATTR_END_WITH = "$"
 
         /* Patterns */
         private const val stylesheet =
-            "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-]+)\\{([^\\}]+)\\}"
+            "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-\\\"\\'\\^]+)\\{([^\\}]+)?\\}"
         private const val selector =
             "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)((?:[\\w\\-]+\\([^\\)]+\\))|[\\w\\-]+)|([\\>\\~\\+])|([, ])"
+        private const val selectorAttr = "^([\\w\\-]+)(?:([\\~\\|\\^\\\$\\*]?)=(['\"])?([\\w\\-]+)(\\3)?\$)?"
         private const val attribute = "([\\w-]+):([^;]*(\\!important)?[^;]*);"
 
         private val styleSheetPattern = Pattern.compile(stylesheet)
         private val selectorPattern = Pattern.compile(selector)
+        private val selectorAttrPattern = Pattern.compile(selectorAttr)
         private val attributePattern = Pattern.compile(attribute)
 
         /* Default */
@@ -170,7 +184,7 @@ open class CssParserTask(
                 val selectorSrc = it.group(STYLESHEET_SELECTOR)
                 val attrsSrc = it.group(STYLESHEET_ATTRS)
                 val selector = selectorSrc.trimWhiteSpace()
-                val attrs = attrsSrc.trimWhiteSpace()
+                val attrs = attrsSrc.orEmpty().trimWhiteSpace()
                 result.add(ParserCascade(selector, attrs))
             }
         }
@@ -230,7 +244,7 @@ open class CssParserTask(
             }
 
             attr?.also {
-                currentEntry.addAttr(it)
+                currentEntry.addAttr(parseSelectorAttr(it))
             }
 
             pseudoName?.also {
@@ -251,6 +265,26 @@ open class CssParserTask(
         val currentTime = (System.currentTimeMillis() - time)
         selectorTime += currentTime
         return selectors
+    }
+
+    private fun parseSelectorAttr(attrsSrc: String): CssSelectorAttribute {
+        val result = selectorAttrPattern.matcher(attrsSrc)
+            .mapOnce {
+                val nameSrc = it.group(SELECTOR_ATTR_NAME)
+                val typeSrc = it.group(SELECTOR_ATTR_TYPE)
+                val valueSrc = it.group(SELECTOR_ATTR_VALUE)
+                val type = when (typeSrc) {
+                    ATTR_EQUALS -> CssSelectorAttribute.Type.EQUALS
+                    ATTR_CONTAINS -> CssSelectorAttribute.Type.CONTAINS
+                    ATTR_CONTAINS_MULTIPLE -> CssSelectorAttribute.Type.CONTAINS_MULTIPLE
+                    ATTR_START_WITH -> CssSelectorAttribute.Type.START_WITH
+                    ATTR_START_MULTIPLE -> CssSelectorAttribute.Type.START_MULTIPLE
+                    ATTR_END_WITH -> CssSelectorAttribute.Type.END_WITH
+                    else -> null
+                }
+                CssSelectorAttribute(nameSrc, valueSrc, type)
+            }
+        return result!!
     }
 
     private fun parseAttrs(attrsSrc: String): List<CssAttribute> {
