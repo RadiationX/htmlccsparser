@@ -84,6 +84,20 @@ object HtmlHelper {
         return node.name == HtmlNode.NODE_TEXT
     }
 
+    fun getAllNodesList(
+        node: HtmlNode,
+        withoutDocument: Boolean = false,
+        result: MutableList<HtmlNode> = mutableListOf()
+    ): List<HtmlNode> {
+        if (!withoutDocument || node !is HtmlDocument) {
+            result.add(node)
+        }
+        node.nodes?.forEach {
+            getAllNodesList(it, withoutDocument, result)
+        }
+        return result
+    }
+
     fun getHtml(document: HtmlDocument, node: HtmlNode, matcher: Matcher): String {
         val resultHtml = StringBuilder()
         val onlyText = isNotElement(node)

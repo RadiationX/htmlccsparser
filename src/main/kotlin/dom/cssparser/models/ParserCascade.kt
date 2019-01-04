@@ -4,5 +4,5 @@ class ParserCascade(
     @JvmField
     val selectorSrc: String,
     @JvmField
-    val bodySrc: String
+    val attrSrc: String
 )

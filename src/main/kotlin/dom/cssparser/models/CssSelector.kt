@@ -8,6 +8,10 @@ class CssSelector {
 
     fun addEntry(entry: CssSelectorEntry) {
         entry.parent = this
+        entries.lastOrNull()?.also { last ->
+            entry.prev = last
+            last.next = entry
+        }
         entries.add(entry)
     }
 

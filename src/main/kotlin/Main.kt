@@ -1,3 +1,4 @@
+import dom.Dom
 import dom.cssparser.CssParserTask
 import dom.cssparser.models.Stylesheet
 import java.io.File
@@ -8,9 +9,10 @@ fun main(args: Array<String>) {
 
 
     //CssTester()
-    HtmlTester()
+    //HtmlTester()
 
+    Dom()
 
-    /*val scanner = Scanner(System.`in`)
-    scanner.nextLine()*/
+    val scanner = Scanner(System.`in`)
+    scanner.nextLine()
 }

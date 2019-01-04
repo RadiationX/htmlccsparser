@@ -4,6 +4,11 @@ class CssSelectorEntry {
     @JvmField
     var parent: CssSelector? = null
     @JvmField
+    var prev: CssSelectorEntry? = null
+    @JvmField
+    var next: CssSelectorEntry? = null
+
+    @JvmField
     var withSpecify: CssSpecify = CssSpecify.DEFAULT
     @JvmField
     var withNodeTag: String? = null
@@ -35,6 +40,29 @@ class CssSelectorEntry {
             withPseudo = mutableListOf()
         }
         withPseudo?.add(data)
+    }
+
+    fun isOnlyPseudo(): Boolean {
+        if (withPseudo != null && withSpecify == CssSpecify.DEFAULT && withNodeTag == null && withNodeId == null && withClasses == null && withAttributes == null) {
+            return true
+        }
+        return false
+    }
+
+    fun isOnlyAttribute(): Boolean {
+        if (withAttributes != null && withSpecify == CssSpecify.DEFAULT && withNodeTag == null && withNodeId == null && withClasses == null && withPseudo == null) {
+            return true
+        }
+        return false
+    }
+
+    fun isPseudoOrAttribute(): Boolean {
+        if ((withAttributes != null || withPseudo != null) && withSpecify == CssSpecify.DEFAULT && withNodeTag ==
+            null && withNodeId == null && withClasses == null
+        ) {
+            return true
+        }
+        return false
     }
 
     fun getSelectorEntry(): String {

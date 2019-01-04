@@ -1,3 +1,5 @@
+package dom
+
 import dom.cssparser.CssParserTask
 import dom.cssparser.models.ParserCascade
 import dom.cssparser.models.Stylesheet

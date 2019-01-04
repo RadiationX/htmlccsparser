@@ -4,7 +4,7 @@ class CssCascade(
     @JvmField
     val selectors: List<CssSelector>,
     @JvmField
-    val attributes: Map<String, String> = emptyMap()
+    val attributes: List<CssAttribute>
 ) {
 
     init {
@@ -13,7 +13,7 @@ class CssCascade(
 
     fun getData(): String {
         val selector = selectors.joinToString(",\n") { it.getData() }
-        val attrs = attributes.toList().joinToString("\n") { "    ${it.first}: ${it.second};" }
+        val attrs = attributes.toList().joinToString("\n") { "    ${it.name}: ${it.rawValue};" }
         return "$selector {\n$attrs\n}"
     }
 }

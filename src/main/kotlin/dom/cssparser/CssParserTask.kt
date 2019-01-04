@@ -23,7 +23,7 @@ open class CssParserTask(
         private const val SELECTOR_SPECIFY = 6
         private const val SELECTOR_DELIMITER = 7
 
-        private const val ELEM_MARKER_CLASS = ""
+        private const val ELEM_MARKER_CLASS = "."
         private const val ELEM_MARKER_ID = "#"
         private const val ELEM_NAME_ALL = "*"
         private const val SPECIFY_INSIDE = ">"
@@ -34,13 +34,14 @@ open class CssParserTask(
 
         private const val ATTR_NAME = 1
         private const val ATTR_VALUE = 2
+        private const val ATTR_MARKER_IMPORTANT = 3
 
         /* Patterns */
         private const val stylesheet =
             "(\\/\\*[^*]*?\\*\\/)|(?<=\\*\\/|\\A|\\})[\\s]*([\\.\\w\\d\\>\\s\\(\\)\\:\\#\\*\\+\\~\\,\\[\\]\\\$\\=\\|\\-]+)\\{([^\\}]+)\\}"
         private const val selector =
-            "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)([\\w\\-\\d\\(\\)]+)|([\\>\\~\\+])|([, ])"
-        private const val attribute = "([\\w-]+):([^;]*);"
+            "([\\.\\#])?([\\w\\-\\*]+)|\\[([^\\]]+)\\]|(::?)((?:[\\w\\-]+\\([^\\)]+\\))|[\\w\\-]+)|([\\>\\~\\+])|([, ])"
+        private const val attribute = "([\\w-]+):([^;]*(\\!important)[^;]*);"
 
         private val styleSheetPattern = Pattern.compile(stylesheet)
         private val selectorPattern = Pattern.compile(selector)
@@ -79,7 +80,7 @@ open class CssParserTask(
     private val cascadesExecutor = object : CascadesExecutor {
         override fun run(parserCascade: ParserCascade): CssCascade {
             val selectors = parseSelector(parserCascade.selectorSrc)
-            val attrs = parseAttrs(parserCascade.bodySrc)
+            val attrs = parseAttrs(parserCascade.attrSrc)
             return CssCascade(selectors, attrs)
         }
     }
@@ -252,17 +253,20 @@ open class CssParserTask(
         return selectors
     }
 
-    private fun parseAttrs(attrsSrc: String): Map<String, String> {
+    private fun parseAttrs(attrsSrc: String): List<CssAttribute> {
         val time = System.currentTimeMillis()
         val matcherSrc = attributePattern.matcher(attrsSrc)
-        val result = mutableMapOf<String, String>()
+        val result = mutableListOf<CssAttribute>()
         matcherSrc.findAll {
             val nameSrc = it.group(ATTR_NAME)
             val valueSrc = it.group(ATTR_VALUE)
+            val importantSrc = it.group(ATTR_MARKER_IMPORTANT)
 
             val name = nameSrc.trimWhiteSpace()
             val value = valueSrc.trimWhiteSpace()
-            result[name] = value
+            result.add(CssAttribute(name, value).also {
+                it.important = importantSrc != null
+            })
         }
         attrTime += (System.currentTimeMillis() - time)
         return result

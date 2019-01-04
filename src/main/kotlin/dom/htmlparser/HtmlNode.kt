@@ -9,6 +9,7 @@ import java.util.LinkedHashMap
 open class HtmlNode {
 
     var nodes: MutableList<HtmlNode>? = null
+    var parent: HtmlNode? = null
     var attributes: LinkedHashMap<String, String>? = null
     var name: String? = null
     var text: String? = null
@@ -23,12 +24,13 @@ open class HtmlNode {
         val addedNodes = nodes ?: (mutableListOf<HtmlNode>()).also {
             nodes = it
         }
+        node.parent = this
         addedNodes.add(node)
     }
 
-    override fun toString(): String {
+    /*override fun toString(): String {
         return "" + name!!
-    }
+    }*/
 
     fun putAttribute(name: String, value: String) {
         val addedAttributes = attributes ?: (LinkedHashMap<String, String>()).also {

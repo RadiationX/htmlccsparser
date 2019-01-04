@@ -144,7 +144,7 @@ class HtmlParser {
         }
         openedNodes.remove(root)
 
-        //Log.d("SUKA", "FINAL OPENED " + openedNodes.size() + " : " + nodesAdd + " : " + nodesClose);
+        println("FINAL OPENED " + openedNodes.size + " : " + nodesAdd + " : " + nodesClose);
 
         return root
     }
