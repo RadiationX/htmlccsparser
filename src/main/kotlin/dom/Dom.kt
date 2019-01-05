@@ -13,7 +13,10 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import java.util.regex.Pattern
 
-class Dom {
+class Dom(
+    private val stylesheet: Stylesheet,
+    private val htmlDocument: HtmlDocument
+) {
 
     companion object {
         private val startMultiplePattern = Pattern.compile("^(\\w+(?:[-][^\$]*)?)\$")
@@ -89,7 +92,7 @@ class Dom {
 
         println("\n\nFILL CASCADES")
         val time = System.currentTimeMillis()
-        fillCascadesBySelector(stylesheet, domNodes)
+        fillCascades(stylesheet, domNodes)
         println("fill time = ${System.currentTimeMillis() - time}")
 
 
@@ -108,28 +111,15 @@ class Dom {
         }
     }
 
-    private fun fillCascadesBySelector(stylesheet: Stylesheet, domNodes: List<DomNode>) {
-        val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
+    private fun fillCascades(stylesheet: Stylesheet, domNodes: List<DomNode>) {
+        val cascadesBatch = mutableMapOf<DomNode, List<CssCascade>>()
         stylesheet.selectors.forEach {
             val selectors = it.value
             //println("\n\nfill selectors ${selectors.size}")
             for (selector in selectors) {
                 //println("fill selector '${selector.getData()}'")
-                val entries = selector.entries
-                val anchorEntry = entries.lastOrNull { !it.isOnlyPseudo() }
-                val anchorHasPseudo = anchorEntry?.withPseudo != null
-                val anchorNextHasPseudo = anchorEntry?.next?.withPseudo != null
-                if (anchorEntry == null || anchorHasPseudo || anchorNextHasPseudo) {
-                    continue
-                }
-                domNodes.forEach { domNode ->
-                    val cascade = tryFillCascadeBySelector(anchorEntry, selector, domNode)
-                    if (cascade != null) {
-                        val list = cascadesBatch[domNode] ?: (mutableListOf<CssCascade>()).also {
-                            cascadesBatch[domNode] = it
-                        }
-                        list.add(cascade)
-                    }
+                findCascadesBySelector(selector, domNodes)?.also {
+                    cascadesBatch.putAll(it)
                 }
             }
         }
@@ -138,7 +128,31 @@ class Dom {
         }
     }
 
-    private fun tryFillCascadeBySelector(
+    private fun findCascadesBySelector(
+        selector: CssSelector,
+        domNodes: List<DomNode>
+    ): Map<DomNode, List<CssCascade>>? {
+        val entries = selector.entries
+        val anchorEntry = entries.lastOrNull { !it.isOnlyPseudo() }
+        val anchorHasPseudo = anchorEntry?.withPseudo != null
+        val anchorNextHasPseudo = anchorEntry?.next?.withPseudo != null
+        if (anchorEntry == null || anchorHasPseudo || anchorNextHasPseudo) {
+            return null
+        }
+        val cascadesBatch = mutableMapOf<DomNode, MutableList<CssCascade>>()
+        domNodes.forEach { domNode ->
+            val cascade = findCascadeBySelector(anchorEntry, selector, domNode)
+            if (cascade != null) {
+                val list = cascadesBatch[domNode] ?: (mutableListOf<CssCascade>()).also {
+                    cascadesBatch[domNode] = it
+                }
+                list.add(cascade)
+            }
+        }
+        return cascadesBatch
+    }
+
+    private fun findCascadeBySelector(
         anchorEntry: CssSelectorEntry,
         selector: CssSelector,
         domNode: DomNode
@@ -172,13 +186,12 @@ class Dom {
 
     private fun checkPrevEntry(entry: CssSelectorEntry, domNode: DomNode): DomNode? {
         val next = entry.next!!
-        val result = when (next.withSpecify) {
+        return when (next.withSpecify) {
             CssSpecify.DEFAULT -> checkPrevEntryDefault(entry, domNode)
             CssSpecify.INSIDE -> checkPrevEntryInside(entry, domNode)
             CssSpecify.NEXT -> checkPrevEntryNext(entry, domNode)
             CssSpecify.ALL_NEXT -> checkPrevEntryAllNext(entry, domNode)
         }
-        return result
     }
 
     private fun checkPrevEntryDefault(entry: CssSelectorEntry, domNode: DomNode): DomNode? {

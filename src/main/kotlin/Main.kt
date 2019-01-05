@@ -11,9 +11,9 @@ fun main(args: Array<String>) {
 
 
     //CssTester()
-    //HtmlTester()
+    HtmlTester()
 
-    Dom()
+    //Dom()
 
     val scanner = Scanner(System.`in`)
     scanner.nextLine()

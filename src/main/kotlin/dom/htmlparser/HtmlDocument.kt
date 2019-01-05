@@ -8,8 +8,6 @@ class HtmlDocument(
 ) {
     val unclosedTags = mutableListOf<HtmlNode>()
     val allNodes = mutableListOf<HtmlNode>()
-    var nodesAdded = 0
-    var nodesClosed = 0
     var parsingTime = 0L
     var attrTime = 0L
     val allTime
@@ -17,7 +15,7 @@ class HtmlDocument(
 
 
     fun getInfo(): String {
-        return "unclosed=${unclosedTags.size}, added=$nodesAdded, closed=$nodesClosed"
+        return "unclosed=${unclosedTags.size}"
     }
 
     fun getStatisticInfo(): String {
