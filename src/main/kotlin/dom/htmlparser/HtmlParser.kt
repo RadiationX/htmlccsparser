@@ -54,6 +54,7 @@ class HtmlParser {
 
     private var attributesTime = 0L
     private var parsingTime = 0L
+    private var allEntries = 0
     private val openedNodes = ArrayList<HtmlNode>()
     private var lastOpened: HtmlNode? = null
     private var attrMatcher: Matcher? = null
@@ -70,6 +71,7 @@ class HtmlParser {
 
         val startTime = System.nanoTime()
         for (entry in entries) {
+            allEntries++
             val special = entry.tag == null && entry.specialTag != null
 
             val attrs = if (special) entry.specialAttrs else entry.attrs
@@ -101,6 +103,7 @@ class HtmlParser {
         parsingTime += System.nanoTime() - startTime
 
         doc.allNodes.addAll(HtmlHelper.getAllNodesList(doc.root, true))
+        doc.allEntries = allEntries
         doc.parsingTime = parsingTime
         doc.attrTime = attributesTime
         return doc
