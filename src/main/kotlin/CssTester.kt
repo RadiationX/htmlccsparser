@@ -12,7 +12,7 @@ class CssTester {
                 println("onSuccess")
                 println(stylesheet.getStatisticInfo())
                 println("stylesheet ${stylesheet.selectors.size}, ${stylesheet.selectorEntries.size}")
-                /*println("\nselectors")
+                println("\nselectors")
                 stylesheet.selectors.forEach {
                     println("  ${it.key} => ${it.value.size}")
                 }
@@ -22,7 +22,7 @@ class CssTester {
                 }
                 stylesheet.cascades.forEach {
                     println(it.getData())
-                }*/
+                }
             }
 
             override fun onError(throwable: Throwable) {

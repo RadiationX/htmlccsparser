@@ -9,9 +9,13 @@ import java.util.concurrent.TimeUnit
 fun main(args: Array<String>) {
     println("Hello, world!")
 
+    val minSize = 0
+    for (i in (5 downTo 0)) {
+        println(i)
+    }
 
-    //CssTester()
-    HtmlTester()
+    CssTester()
+    //HtmlTester()
 
     //Dom()
 

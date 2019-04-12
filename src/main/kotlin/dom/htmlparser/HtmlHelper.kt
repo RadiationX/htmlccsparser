@@ -55,7 +55,8 @@ object HtmlHelper {
         "input",
         "label",
         "select",
-        "textarea"
+        "textarea",
+        "font"
     )
 
     fun isUnclosing(tag: String?): Boolean {
@@ -198,7 +199,7 @@ object HtmlHelper {
     }
 
 
-    fun findNode(node: HtmlNode, tag: String, attr: String?, value: String): HtmlNode? {
+    fun findNode(node: HtmlNode, tag: String, attr: String? = null, value: String = ""): HtmlNode? {
         if (isNotElement(node)) {
             return null
         }

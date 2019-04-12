@@ -1,1 +1,829 @@
-<div class="post_body" id="post-main-1990421"><span style="font-size:14pt;line-height:100%"><b>Hackintosh на РС - обсуждение</b></span> <br /><div align="center"><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=72333&view=getnewpost" target="_blank"><b><span style="color:green">Выбор комплектующих для macOS</span></b></a> | <b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=669880" target="_blank"><span style="color:blue">10.11 El Capitan</span></a></b> | <b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=753765" target="_blank"><span style="color:red">macOS Sierra 10.12</span></a></b> | <b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=828222" target="_blank">macOS High Sierra 10.13</a></b> | <b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=904175" target="_blank">macOS Mojave 10.14</a></b><br /><font style="font-size:9px;color:gray;"><b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=898156" target="_blank">Тонкая кастомизация macOS</a></b> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=584031" target="_blank"><b>Клуб любителей Mac OS</b></a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=575042" target="_blank"><b>Программы для Mac OS X</b></a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=138395" target="_blank"><b>Apple MacBook — общая тема</b></a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=107160" target="_blank"><b>Обсуждение Mac OS X</b></a> |</font></div><br /><div align="center"><img src="//cs5-2.4pda.to/4456733.png" class="linked-image" alt="Прикрепленное изображение" /></div><br /><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Настройка BIOS</div><div class="block-body"><ol type="1"><b>UEFI bios:</b><br /><li>Скидываем все настройки в default.<br /></li><li>AHCI - enable; <br /></li><li>Vt-d: Disable (+ в Clover дропнуть DMAR таблицу)<br /></li><li>Vt-d: Enable (только для 10.13 и если используете виртуальные машины)<br /></li><li>Intel Virtualization Technology (для 10.13 обязательно, иначе будет подтормаживать интерфейс)<br /></li><li>Serial-port: Disable<br /></li><li>XHCI Hand-off: Disable (рекомендуеться)<br /></li><li>XHCI Hand-off: Enabled (только если что то не работает в режиме Disable )<br /></li><li>IOAPIC 24-119 Entries: Enabled (подмечено что у многих с этим пунктом паникует, поэтому тестируйте)<br /></li><li>CSM: Disable (по возможности)<br /><br /><b>Legacy bios:</b><br /></li><li>AHCI: enable;  <br /></li><li>HPET: enable;<br /></li><li>Vt-d: disable;<br /></li><li>ACPI Suspend Type  - S3 (Only); <br /></li><li>No Execute memory - enable;<br /></li><li>USB Legacy - enable;<br /></li><li>Отключаем всю периферию (вебки, смарты, блютуз-свистки, кард-ридеры и т.д.) </li></ol><br />. ...<br />&#91;i&#93;Примечание:<br /><ol type="1"><li>HDD должен быть подключен к SATA-0, контролер Intel.<br /></li><li>...&#91;/i&#93;</li></ol><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><b>Установка macOS через Boot Disk Utility</b></div><div class="block-body"> <br />Для установки потребуется флешка не менее 8Гб. <br /> <ol type="1"><li>ПК на ОС Windows XP/7/8.<br /></li><li>Скачать утилиту Boot Disk Utility с <a title="Ссылка" rel="nofollow" href="http://cvad-mac.narod.ru/index/0-5" target="_blank">страницы разработчика cvad</a> или с форума applelife.ru со страницы <a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/" target="_blank">посвящённой данной утилите.</a><br /></li><li>Установить по <a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/" target="_blank">инструкции</a><br /></li><li>Зайти на флешку в папку EFI\CLOVER\ и удалить папку OEM и файл config-sample <i>(не путать с config.plist)</i>.<br /></li><li>Скачать образ Mac OS X по указанным ссылкам:<br /><a title="Ссылка" rel="nofollow" href="https://applelife.ru/posts/557498" target="_blank"><b>Нажми и качай!</b></a><br /></li><li>Развернуть скаченный образ на подготовленную флешку.<ol type="1"><li>Инструкция с applelife.ru пункт <a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/" target="_blank">"<i>Заливка дистрибутива macOS на второй том загрузочного USB Flash drive:</i>"</a>:<br /></li><li>В основном окне программы -&gt; Destination Disk - выбираем наш USB Flash Drive -&gt; Part2.<br /></li><li>Нажимаем кнопку "Restore Partition".<br /></li><li>В открывшемся окне проводника выбираем распакованный файл с расширением *.hfs.</li></ol></li><li>Тем, кто устанавливает на ноутбук<span style="font-size:8pt;line-height:100%"><i> (или имеет PS/2 мышь или клавиатуру)</i></span>, обязательно скачать <a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/4617905/VoodooPS2Controller.kext.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать VoodooPS2Controller.kext.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>VoodooPS2Controller.kext.zip</a> ( 97,46 КБ )<br />, новая версия: <a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/9410133/VoodooPS2Controller.kext.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать VoodooPS2Controller.kext.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>VoodooPS2Controller.kext.zip</a> ( 93,86 КБ )<br /> положить в папку EFI/CLOVER/KEXT/10.X или Other<br /></li><li>Всё, установочная флешка готова, можно приступать к установке.</li></ol><br /><br /><i><b>За данный споcоб установки благодарим cvad и Skvo</b></i> <br /><i>Данная инструкция написана по материалам с applelife.ru</i></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><b>После установки</b></div><div class="block-body"> <br />Установить один из загрузчиков на диск <span style="font-size:8pt;line-height:100%">(<i>если он не входит в состав сборки</i>)</span>: <br />- <a title="Ссылка" rel="nofollow" href="http://sourceforge.net/projects/cloverefiboot/?source=pdlp" target="_blank">Загрузчик №1 - Clover</a> <i><b>(рекомендуем)</b></i>;<br /><i>Как это сделать:</i> <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&st=4740&view=findpost&p=31561690" target="_blank"><i>UEFI</i></a>, <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&st=4420&view=findpost&p=31174480" target="_blank"><i>Legacy BIOS</i></a>. <br />- <a title="Ссылка" rel="nofollow" href="http://www.osx86.net/files/category/3-bootloaders/" target="_blank">Загрузчик №2 - Chameleon</a> (на данный момент существует для очень старых систем и особых случаев);<br /><i><span style="font-size:8pt;line-height:100%">*загрузчик устанавливаем только один, на ваш выбор</span></i><br /><br /><b>После входа в macOS первое, что делаем:</b> <br /><ol type="1"><li>Устанавливаем кекст для сетевой карты; <br /></li><li>Настраиваем SMbios;<br /></li><li>"Заводим" видео-карту <i>(разрешение должно быть правильным, и верхняя строка прозрачная);</i><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31411055" target="_blank">Поднимаем "нативное управление питанием" процессора</a>;<br /></li><li>Поднимаем звук через AppleALC или VoodooHDA</li></ol><br />...<br />21. Ставим програмулинки и "рюшечки".</div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Видео, Звук, USB, Сеть, прочее:</div><div class="block-body"><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Процессор:</div><div class="block-body"><ul><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31411055" target="_blank">Инструкция по заведению P&C-States (SpeedStep) на процессорах Core2Duo/Sandy Bridge/Ivy Bridge/Haswell через Clover.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="http://osxpc.ru/zavod/cpu-zavod/hackintosh-pentium-haswell/" target="_blank">Pentium и Celeron (Haswell-LGA1150)</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/entries/rabotaet-li-spidstep.108/" target="_blank">Работает ли спидстеп?</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.applelife.ru/threads/ivy-bridge-haswell-speedstep-turboboost.38283/" target="_blank">Ivy Bridge, Haswell - SpeedStep & TurboBoost</a></li></ul><br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Видео:</div><div class="block-body"><span style="font-size:10pt;line-height:100%"><ul><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/1289648" target="_blank"><b>Актуальная</b> инструкция по заводу Intel HD Graphics 3000/4000/4600/5000/530/630... </a><br /><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/1546195/" target="_blank">Завод Nvidia Maxwell и Pascal (GTX750*, 9*, 10*)</a><br /><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32265264" target="_blank">Завод видеокарт Intel HD4000/4400/4600/5000. Отключение видеокарт NVIDIA.</a><br /><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/28890" target="_blank">ATI HD4xx0, HD5xx0; AMD HD6xx0, HD7xx0, R5, R7, R9, RX, Vega</a><br /><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&st=4840&view=findpost&p=31658497" target="_blank">Отключение видеокарт NVidia в ноутбуках с технологией Optimus</a></li></ul></span><br /><ul><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45486199" target="_blank">Заводим видеокарты на 10.11.2 (EL Capitan) NVIDIA 780/680/285/120/8800 GT/Quadro K5000, Quadro 4000/Quadro FX 4800, Quadro FX 5600</a>.<br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/intel-hd3000-hd4000-hd4600-hd5000-nd5500-hd5600-hd520-hd530.1289648/" target="_blank">Intel HD3000 HD4000 HD4600 HD5000 НD5500 HD5600 HD520 HD530</a> <a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/ustanovka-macos-sierra-10-12-na-intel-pc.1367064/page-421#post-634198" target="_blank">Desktop HD530</a><br /></li><li><a title="Ссылка" rel="nofollow" href="http://osxpc.ru/category/zavod/gpu/" target="_blank">Заводим видеокарты, инструкции от osxpc.ru</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/reguljator-jarkosti-dlja-hd3000-hd4000-hd4600-odnim-slovom-acpibacklight.688531/" target="_blank">Регулятор яркости для HD3000, HD4000, HD4600 (одним словом ACPIBacklight)</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.cmd-help.ru/как-завести-intel-hd-graphics-на-mac-os-x-10-11-el-capitan/" target="_blank">Intel HD Graphics на Mac OS X 10.11 El Capitan</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.tonymacx86.com/threads/kaby-lake-hd620-working.209598/" target="_blank">Kaby Lake HD620</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=58075541" target="_blank">Заводим Kaby Lake Intel HD630 на dekstop</a><br /></li></ul></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Звук:</div><div class="block-body"><ul><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/applealc-dinamicheskij-patching-applehda.1171672/" target="_blank">AppleALC — динамический патчинг AppleHDA</a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=57190685" target="_blank">Инструкция на пальцах как поднять звук через AppleALC</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40629650" target="_blank">Мануалы по VooooHDA.kext</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=50669573" target="_blank">Установка и настройка VoodooHDA.kext</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.applelife.ru/threads/delaem-zvuk-na-osnove-voodoohda.18413/" target="_blank">Оригинальная тема по VoodooHDA</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=57173635" target="_blank">AppleHDA Patcher v1.8 by Micky1979 and Mirone</a></li></ul></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Сеть:</div><div class="block-body"><ul><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/ustanovka-os-x-s-pomoschju-bdu-i-obraza-recoveryhd.1154924/page-5#post-613981" target="_blank">https://applelife.ru/t…924/page-5#post-613981</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.insanelymac.com/forum/forums/topic/287161-new-driver-for-realtek-rtl8111/" target="_blank">https://www.insanelyma…r-for-realtek-rtl8111/</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.insanelymac.com/forum/forums/topic/304235-intelmausiethernetkext-for-intel-onboard-lan/" target="_blank">https://www.insanelyma…for-intel-onboard-lan/</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://www.insanelymac.com/forum/forums/topic/286937-realtekr1000-v3/" target="_blank">https://www.insanelyma…86937-realtekr1000-v3/</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/realtek-rtl8111-8168x-b-c-d-e-f-g-h-rtl8100x-lan-nic-by-mieze.1177689/" target="_blank">https://applelife.ru/t…-nic-by-mieze.1177689/</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/realtek-rtl8111f-8168x-ispravlennyj-drajver.37061/" target="_blank">https://applelife.ru/t…vlennyj-drajver.37061/</a><br /></li></ul></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">USB:</div><div class="block-body"><ul><li><a title="Ссылка" rel="nofollow" href="https://bitbucket.org/RehabMan/os-x-usb-inject-all/downloads" target="_blank">https://bitbucket.org/…b-inject-all/downloads</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/nastrojka-usb-v-10-11-10-13.627190/page-18#post-550233" target="_blank">https://applelife.ru/t…90/page-18#post-550233</a><br /></li></ul></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">MacAppStore и iCloud; iMessage и FaceTime:</div><div class="block-body"><ul><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30937780" target="_blank">Заводим/настраиваем iMessage, FaceTime.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/nastrojka-appstore-imessage-i-icloud-v-os-x.40790/page-130#post-609733" target="_blank">Настройка AppStore, iMessage и iCloud в OS X 10.12</a></li></ul></div></div></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><b><span style="color:red">Решение проблем</span></b></div><div class="block-body"><ol type="1"><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/panic-cpu-panika-varianty-reshenija.42135/" target="_blank"><span style="color:red">Варианты "panic"<i>(остановка загрузки)</i> на этапе установки OS X и их решение</span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31137303" target="_blank">Паника AppleIntelCPUPowerManagement <b><span style="color:red">&lt;= очень распространённая проблема!</span></b></a><br /></li><li>Решение ошибки <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=57053567" target="_blank">Черный экран  с ++++++++++++++++++</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32257410" target="_blank">Останавливается на загрузке "&#91;IOBluetoothHCIController&#93;&#91;SearchForTransportEventTimeOutHandler&#93; -- Missing Bluetooth Controller Transport</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30945519" target="_blank">Исправление ошибки "boot error" в Clover вариант №1</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32540139" target="_blank">Исправление ошибки "boot error" в Clover вариант №2</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=34105771" target="_blank">Исправление ошибки "boot error" в Clover/Chameleon от</a> <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showuser=3887317" target="_blank">Bobko_904</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=79185441" target="_blank">Если после установки <b>Windows</b> не загружается Clover</a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=79189447" target="_blank">2 способ</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37367017" target="_blank">Решение проблемы с отображением времени в Windows</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=71192668" target="_blank">Если на Nvidia GTX 750Ti работает только VGA</a></li></ol></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><b>Полезные ссылки</b></div><div class="block-body"><ol type="1"><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/" target="_blank">Boot Disk Utility - создание загрузочной флешки из под Windows.</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://sourceforge.net/projects/cloverefiboot/?source=pdlp&quot;" target="_blank">Clover - скачать EFI загрузчик.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/clover.42089/" target="_blank">Clover - обсуждение на applelife.ru</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://sourceforge.net/projects/hwsensors/?source=navbar" target="_blank">HWmonitor - мониторинг всех показателей системы</a> | <a title="Ссылка" rel="nofollow" href="http://hwsensors.com/" target="_blank">hwsensors</a> | <a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/fakesmc-i-monitoring-vsego.24475/" target="_blank"><i>Обсуждение на applelife.ru</i></a>. <br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/latest-kext-utility.41036/" target="_blank">Kext Utility - Восстановление прав в системе, установка кекстов.</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://www.hackintoshosx.com/files/category/3-bootloaders/" target="_blank">Chameleon</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://www.hackintoshosx.com/" target="_blank">База драйверов (kext) для Hackintosh</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://www.insanelymac.com" target="_blank">Хороший зарубежный форум по хакинтошам (insanelymac)</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://wiki.osx86project.org" target="_blank">Wiki-база по совместимому железу (wiki.osx86project)</a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://applelife.ru" target="_blank"><span style="color:darkblue"><b>Лучший форум по хакинтошам (applelife.ru)</b></span></a> <br /></li><li><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewforum.php?f=1366" target="_blank">Ветка Rutracker.org по макам (ритейлы, сборки, софт)</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30931033" target="_blank">Установка Mac OS X 10.9.2 - 10.10.3 на Lenovo A730</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31174480" target="_blank">Установка Clover на жёсткий диск для Legacy bios (<i>старые материнские платы</i>)</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31561690" target="_blank">Установка Clover на жёсткий диск для UEFI материнских плат.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://bitbucket.org/blackosx/darwindumper/downloads" target="_blank">DarwinDumper - утилита для снятия полного отчёта о системе.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31414927" target="_blank"><span style="color:crimson"><b>Редакторы config.plist</b></span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=29196063" target="_blank">Как установить kext в Mac OS X</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&st=4840&view=findpost&p=31658783" target="_blank">Как удалить кекст в Mac OS X</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31996682" target="_blank">Изменение разметки диска с MBR в GPT без потери данных</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=54114705" target="_blank">Как конвертировать жесткий диск с установленной Windows 10 c MBR на GPT без потери данных!</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32236021" target="_blank">Как включить режим Dark Graphite в OS X 10.10 Yosemite</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32506503" target="_blank">Как включить USB-Bluetooth на чипе CSR</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31608696" target="_blank">Обновление Mac OS X 10.8.5 на Mac OS X 10.9 Mavericks</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30310122" target="_blank"> Способ №1 Активация TRIM на SSD, фикс "оранжевых" иконок в Clover</a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&st=26240&view=findpost&p=56890488" target="_blank">Способ №2</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32821554" target="_blank">Создание флешки для установки Windows на диск с Mac OS X</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=34067211" target="_blank"><span style="color:darkred"><b>Создание загрузочной флешки Mac OS X Mavericks  или Yosemite с загрузчиком Clover</b></span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37150265" target="_blank">Elan Touchpad Driver для ноутбуков</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37266737" target="_blank">Создаем Legacy kext для Bluetooth</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40595142" target="_blank"><span style="color:teal"><b>Скриншоты GUI Clover</b></span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40610502" target="_blank"><span style="color:red"><b>Назначений ключей <i>(boot arguements)</i> в загрузчике Clover</b></span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45378314" target="_blank">Как получить доступ из Windows к EFI разделу (тут прячется клевер) на Mac OS</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45522785" target="_blank">Установка Mac Os X на ноутбуки семейства Asus N/k/s Core I 3\5\7 Ivy Bridge.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=47357233" target="_blank"><b><span style="color:red">Установка Винды и Мака на один жесткий диск</span></b></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=36925759" target="_blank">Краткое описание кекстов: FakeSMC.kext, AppleHDA.kext и т.д.</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=84979&view=findpost&p=50372231" target="_blank">Как восстановить EFI раздел HDD Mac OS X</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=51228255" target="_blank"><b>Сборник полезных программ в одном архиве</b></a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/nastrojka-usb-v-10-11.627190/" target="_blank">Настройка USB в 10.11</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=56893758" target="_blank"><span style="color:blue"><b>Патчи для macOS Sierra и SkyLake</b></span></a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=59891628" target="_blank"><b>FakeSMC + HWSensors с поддержкой Kaby Lake</b></a>\<br /></li><li><a title="Ссылка" rel="nofollow" href="http://toklovich.ru/ustanavlivaem-mac-os-x-na-semeystvo-noutbukov-hp-probook-elitebook/" target="_blank">Устанавливаем Mac OS X на семейство ноутбуков HP ProBook, Elitebook</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://habrahabr.ru/post/318448/" target="_blank">Разворачиваем macOS Sierra на Intel-PC подробно и понятно</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://support.apple.com/ru-ru/HT201372" target="_blank">Создание загружаемого установщика для macOS с apple.com</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://support.apple.com/ru-ru/HT201361" target="_blank">Как делать снимки экрана на компьютере Mac</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/osx-na-pentium-celeron-haswell.41764/page-5#post-608521" target="_blank">Установка OS X на Haswell Pentium/Celeron</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://ddr5.ru/ustanovka-hackintosh-pri-pomoshhi-bdu-i-recovery-obraza/" target="_blank">Установка Hackintosh при помощи BDU и Recovery образа</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=65517273" target="_blank">Fix for ICH10 with High Sierra</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=67951887" target="_blank">Скрипт по созданию загрузочной Windows UEFI-флешки из под macOS</a><br /></li><li><a title="Ссылка" rel="nofollow" href="https://yablyk.com/956788-kak-nastroit-menyu-ob-etom-mac-na-svoj-vkus/" target="_blank">Как изменить данные железа в разделе «Об этом Mac» на любые другие</a><br /></li><li><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=62112835" target="_blank">Создаем "правильную" загрузочную флешку с macOS Higt Sierra 10.13.4</a></li></ol><br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><b>Актуальные сборки:</b></div><div class="block-body"><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">macOS Sierra 10.12-10.14</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/posts/557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.14 для BDU</b></a><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">OS X El Capitan 10.11</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/posts/557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.14 для BDU</b></a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/32811/" target="_blank">OS X El Capitan 10.11 &#91;Mac & PC установленный образ&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/33485/" target="_blank">Загрузочный раздел (5.hfs) с инсталлятором OS X 10.11.1 (15B42) - для BootDiskUtility.</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/35721/" target="_blank">OS X El Capitan 10.11.5 &#91;MAS&#93; &#91;15F34&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/33357/" target="_blank">OS X El Capitan 10.11.5 &#91;Установочный ISO&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/33456/" target="_blank">Загрузочный раздел (5.hfs) с инсталлятором OS X 10.10.5 (14F27) - для BootDiskUtility.</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5020993" target="_blank">OS X El Capitan 10.11.5 (15F34) &#91;Intel&#93; (Флешка для установки) Legacy, UEFI, MBR, GPT.</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5226768" target="_blank">OS X El Capitan 10.11.5 &#91;Mac App Store&#93; (Установочный)</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5030423" target="_blank">OS X El Capitan 10.11.3 (15D21) &#91;Intel&#93; MBR (Установленная система)</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5077339" target="_blank">&#91;RUS&#93; OS X El Capitan 10.11.4 + clover 3389&#91;Intel&#93;</a><br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">OS X Yosemite 10.10</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755224" target="_blank">Образ установленной OS X Yosemite 10.10.1 для разворачивания через R-Drive MBR.</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755796" target="_blank">OS X Yosemite 10.10.1 (14B25) &#91;Intel&#93; (Флешка для установки) + MBR patch</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755224" target="_blank">OS X Yosemite 10.10.1 (14B25) (Установленная система для быстрой и легкой установки)</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/28093" target="_blank"><b>OS X Yosemite 10.10 GM 14A389</b> <span style="font-size:8pt;line-height:100%"><i>(с inmac.org )</i></span></a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755796" target="_blank">OS X Yosemite 10.10.1 (14B25) &#91;Intel&#93; (Флешка для установки) + MBR patch</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/29613/" target="_blank">OS X Yosemite 10.10.2 (14C109) - для BootDiskUtility</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/30694/" target="_blank">OS X Yosemite 10.10.3 (14D131) - для BootDiskUtility</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/28301/" target="_blank">OS X Yosemite 10.10 (14A389) - для BootDiskUtility</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/28647/" target="_blank">OS X Yosemite 10.10.1 &#91;MAS&#93;</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4893965" target="_blank">OS X Yosemite 10.10.1 &#91;Intel, AMD&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/29650/" target="_blank">OS X Yosemite 10.10.2 &#91;Mac & PC установленный образ&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/30689/" target="_blank">OS X Yosemite 10.10.3 &#91;Mac & PC установленный образ&#93;</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4981363" target="_blank">OS X Yosemite 10.10.3 + clover <i>(Разворачиваем образ через Transmac из под винды.)</i></a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/31639/" target="_blank">OS X Yosemite 10.10.4 (14E46) &#91;MAS&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/31666/" target="_blank">OS X Yosemite 10.10.4 &#91;Mac & PC установленный образ&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/32154/" target="_blank">OS X Yosemite 10.10.5 &#91;MAS&#93;</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/33456/" target="_blank">OS X Yosemite 10.10.5 (14F27) - для BootDiskUtility</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/32313/" target="_blank">OS X Yosemite 10.10.5 &#91;Установочный ISO&#93;</a><br /><a title="Ссылка" rel="nofollow" href="http://osxamd.ru/own-image/" target="_blank">OS X Yosemite 10.10.5 для AMD</a><br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Mac OS X 10.9 Mavericks</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br /><b>Образы с inmac.org</b> <br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/24290/" target="_blank">OS X Mavericks 10.9.1 Boot Disk Utility.</a> <br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/25737/" target="_blank">OS X Mavericks 10.9.2 Boot Disk Utility.</a><br /><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31874281" target="_blank">OS X Mavericks 10.9.3 Boot Disk Utility.</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27191/" target="_blank">OS X Mavericks 10.9.4 Boot Disk Utility</a>.<br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27796/" target="_blank">OS X Mavericks 10.9.5 Boot Disk Utility.</a><br /><a title="Ссылка" rel="nofollow" href="http://www.mediafire.com/folder/s4qc57b5pji2d/OS_X_for_BDU" target="_blank">OS X Mavericks 10.9.X Boot Disk Utility зеркало на mediafire</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27785/" target="_blank">OS X Mavericks 10.9.5 + загрузчик Clover</a><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27790/" target="_blank">OS X Mavericks 10.9.5 &#91;Mac & PC установленный образ&#93;</a><br /><b>Образы с rutracker.org</b><br /><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27796/" target="_blank">OS X Mavericks 10.9.5 Boot Disk Utility.</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4622382" target="_blank">OS X Mavericks 10.9.1 &#91;Intel&#93; + Clover</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4679601" target="_blank">OS X Mavericks 10.9.3 (13D65) &#91;Intel&#93; + Clover (MBR or GUID)</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4470864" target="_blank">Флешка для самостоятельной установки OS X Mavericks 10.9.3 (13C64) MAS</a> <br /><a title="Ссылка" rel="nofollow" href="https://dark-os.com/viewtopic.php?t=150830" target="_blank">Флешка для самостоятельной установки OS X Mavericks 10.9 &#91;Intel/AMD&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4690725" target="_blank">Флешка для самостоятельной установки OS X Mavericks 10.9 &#91;Intel/AMD&#93; <i>(с http://rutracker.org)</i></a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4462718" target="_blank">OS X Mavericks 10.9.4 (13E28) &#91;Intel&#93; (Установленная система для быстрой и легкой установки) MAS *(only MBR)</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4462718" target="_blank">OS X Mavericks 10.9.5</a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4679601" target="_blank">OS X Mavericks 10.9.5 (13F34) &#91;Intel&#93; + Clover</a><br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Mac OS X 10.8 Mountain Lion</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4121627" target="_blank">Флешка для самостоятельной установки Mountain Lion 10.8.5&#91;Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4029581" target="_blank">Mac OS X Mountain Lion 10.8.5 &#91;Установленная система. Простая и быстрая установка&#93;&#91;Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4152164" target="_blank">OS X Mountain Lion Install DVD 10.8.2 &#91;Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4309922" target="_blank">iAtkos ML2 (OS X Mountain Lion 10.8.2) для USB-флешки &#91;Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4222713" target="_blank">Os X Mountain Lion 10.8.2 (Образ для VMware)&#91;Intel&#93;</a> <br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Mac OS X 10.7 Lion</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498" target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3968290" target="_blank">Флешка для самостоятельной установки Mac OS X Lion 10.7.5 &#91;Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3936738" target="_blank">Mac OS X 10.7.3 Install DVD </a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3826338" target="_blank">iAtkos L2 (OS X Lion 10.7.2) </a> <br /><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Mac OS X 10.6 Snow Leopard</div><div class="block-body"><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3739310" target="_blank">Mac OS X Snow Leopard - 10.6.8 (установленная система. Простая и быстрая установка) &#91;AMD/Intel&#93;</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3028010" target="_blank">iAtkos S3 10.6.3 ver.2</a> <br /><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=2922803" target="_blank">Mac OS X Snow Leopard Install DVD (Retail) - 10.6.3</a> <br /><br /></div></div></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch"><span style="color:red"><b><span style="font-size:10pt;line-height:100%">Как правильно задать вопрос</span></b></span></div><div class="block-body"> <br />Задавая вопрос указывайте: <br />Процессор: Intel i7 4770; <br />Материнская плата: GA-Z87-DH3; <br />Видеокарту: NV GTX660; <br />Загрузчик:<br /><i>Clover – 4011;<br />Chameleon – 2258; </i><br />Версия macOS; <br />Прикрепляем скрин с проблемой и прячем его под спойлер. <br />Если вы желаете получить помощь в этой теме, <b><span style="color:red">настоятельно рекомендуется</span></b> занести описание комплектующих в <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?act=UserCP&CODE=22" target="_blank"><b><i>подпись</i></b></a>: <span style="font-size:8pt;line-height:100%"><i>(пример: Процессор/Материнская плата/Видеокарта/Загрузчик).</i></span><br /><div class="post-block code box"><div class="block-title"></div><div class="block-body noemoticons">&#91;b&#93;Процессор: &#91;/b&#93; | &#91;b&#93;Материнская плата:&#91;/b&#93; | &#91;b&#93;Видеокарта:&#91;/b&#93; | &#91;b&#93;Версия ОС и загрузчик:&#91;/b&#93;<br />&#91;spoiler=Скриншоты проблемы&#93;Здесь прикрепляем скриншоты или фото&#91;/spoiler&#93;<br /></div></div><br /></div></div><div class="post-block spoil close"><div class="block-title" title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">Мануалы по Clover</div><div class="block-body"><b><span style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/8823074/Klever_cveta_xaki_3545.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать Klever_cveta_xaki_3545.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_3545.zip</a> ( 4,18 МБ )<br /><br /><b><span style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/9629581/Klever_cveta_xaki_4000.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать Klever_cveta_xaki_4000.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_4000.zip</a> ( 3,77 МБ )<br /><br /><b><span style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/11224919/Klever_cveta_xaki_4244.pdf.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать Klever_cveta_xaki_4244.pdf.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_4244.pdf.zip</a> ( 3,72 МБ )<br /><br /><a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/12255362/%CA%EB%E5%E2%E5%F0+%F6%E2%E5%F2%E0+%F5%E0%EA%E8+4415.zip" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать Клевер цвета хаки 4415.zip" target="_blank"><img src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>Клевер цвета хаки 4415.zip</a> ( 3,68 МБ )<br /><br /><a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/12768703/%CA%EB%E5%E2%E5%F0+%F6%E2%E5%F2%E0+%F5%E0%EA%E8+4450.pdf" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать Клевер цвета хаки 4450.pdf" target="_blank"><img src="//s.4pda.to/JK4KIcRdNMys1NxMyrdELf1jUsHpqmAv6LwP3Z0WNe2slRSC0alDMjhMH6z0D.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>Клевер цвета хаки 4450.pdf</a> ( 4,05 МБ )<br /></div></div><br /><b>Актуальный мануал по Clover <span style="font-size:14pt;line-height:100%">&#8594;</span></b> <a class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/13123526/431566_Klever_cveta_xaki_4542.pdf" data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;" title="Скачать 431566_Klever_cveta_xaki_4542.pdf" target="_blank"><img src="//s.4pda.to/JK4KIcRdNMys1NxMyrdELf1jUsHpqmAv6LwP3Z0WNe2slRSC0alDMjhMH6z0D.gif" alt="Прикрепленный файл" style="margin-right:3px;"/>431566_Klever_cveta_xaki_4542.pdf</a> ( 4,33 МБ )<br /><br /><span style="color:darkblue"><b>Актуальный релиз Clover</b></span> <a title="Ссылка" rel="nofollow" href="https://sourceforge.net/projects/cloverefiboot/" target="_blank"><img alt="Изображение" src="//s.4pda.to/JK4KGce6a8k9XcMNDwFz2XLpFpaqSI783tgwxekiZToT.png" /></a><br /><div align="center"><span style="font-size:12pt;line-height:100%"><span style="color:darkred"><b>Настройки, патчи, фиксы вносятся в файл EFI/CLOVER/</span><b>сonfig.plist</b>, <span style="color:darkred">редактировать этот файл нужно</span> <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31414927" target="_blank"><b>этим</b></a>.</span><br /><span style="font-size:10pt;line-height:100%"><span style="color:darkred"><b>В macOS порт VGA не работает, подключать монитор нужно к DVI-D/HDMI/DP. Eсть исключения для некоторых моделей. На графике Intel HD порт VGA не работает ни при каких ухищрениях!</b></span></span><br /><span style="color:teal"><span style="font-size:12pt;line-height:100%"><b>При установке macOS наличие ключей -v debug=0x100 keepsyms=1 обязательно!</b></span><br /><span style="color:crimson">При установке macOS High Sierra и новее обязателено добавьте <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=74191081" target="_blank">драйвер APFS</a> в Clover!</span></span></b></div><br /><div class="post-block tbl cur"><div class="block-title">K</div><div class="block-body"><div align="center"><b>Основное правило/требование темы: хотите получить помощь/совет - заполните свою подпись, указав:</b><br /><span style="color:teal"><b>Процессор | Материнская плата | Видеокарта | Версия OS X | Загрузчик.</b></span><br /><span style="color:red"><b>Без подписи все сообщения удаляются.</b></span><br /></div></div></div><br /><br /><span class="edit">Сообщение отредактировал <a href="//4pda.ru/forum/index.php?showuser=1940031" target="_blank"><b>nikitenich</b></a> - 19.11.18, 20:21</span></div>
+<div class="post_body" id="post-main-1990421"><span style="font-size:14pt;line-height:100%"><b>Hackintosh на РС - обсуждение</b></span>
+    <br/>
+    <div align="center"><a title="Ссылка" rel="nofollow"
+                           href="//4pda.ru/forum/index.php?showtopic=72333&view=getnewpost" target="_blank"><b><span
+            style="color:green">Выбор комплектующих для macOS</span></b></a> | <b><a title="Ссылка" rel="nofollow"
+                                                                                     href="//4pda.ru/forum/index.php?showtopic=669880"
+                                                                                     target="_blank"><span
+            style="color:blue">10.11 El Capitan</span></a></b> | <b><a title="Ссылка" rel="nofollow"
+                                                                       href="//4pda.ru/forum/index.php?showtopic=753765"
+                                                                       target="_blank"><span style="color:red">macOS Sierra 10.12</span></a></b>
+        | <b><a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=828222" target="_blank">macOS
+            High Sierra 10.13</a></b> | <b><a title="Ссылка" rel="nofollow"
+                                              href="//4pda.ru/forum/index.php?showtopic=904175" target="_blank">macOS
+            Mojave 10.14</a></b><br/><font style="font-size:9px;color:gray;"><b><a title="Ссылка" rel="nofollow"
+                                                                                   href="//4pda.ru/forum/index.php?showtopic=898156"
+                                                                                   target="_blank">Тонкая кастомизация
+            macOS</a></b> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=584031"
+                               target="_blank"><b>Клуб любителей Mac OS</b></a> | <a title="Ссылка" rel="nofollow"
+                                                                                     href="//4pda.ru/forum/index.php?showtopic=575042"
+                                                                                     target="_blank"><b>Программы для
+            Mac OS X</b></a> | <a title="Ссылка" rel="nofollow" href="//4pda.ru/forum/index.php?showtopic=138395"
+                                  target="_blank"><b>Apple MacBook — общая тема</b></a> | <a title="Ссылка"
+                                                                                             rel="nofollow"
+                                                                                             href="//4pda.ru/forum/index.php?showtopic=107160"
+                                                                                             target="_blank"><b>Обсуждение
+            Mac OS X</b></a> |</font></div>
+    <br/>
+    <div align="center"><img src="//cs5-2.4pda.to/4456733.png" class="linked-image" alt="Прикрепленное изображение"/>
+    </div>
+    <br/>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            Настройка BIOS
+        </div>
+        <div class="block-body">
+            <ol type="1"><b>UEFI bios:</b><br/>
+                <li>Скидываем все настройки в default.<br/></li>
+                <li>AHCI - enable; <br/></li>
+                <li>Vt-d: Disable (+ в Clover дропнуть DMAR таблицу)<br/></li>
+                <li>Vt-d: Enable (только для 10.13 и если используете виртуальные машины)<br/></li>
+                <li>Intel Virtualization Technology (для 10.13 обязательно, иначе будет подтормаживать интерфейс)<br/>
+                </li>
+                <li>Serial-port: Disable<br/></li>
+                <li>XHCI Hand-off: Disable (рекомендуеться)<br/></li>
+                <li>XHCI Hand-off: Enabled (только если что то не работает в режиме Disable )<br/></li>
+                <li>IOAPIC 24-119 Entries: Enabled (подмечено что у многих с этим пунктом паникует, поэтому
+                    тестируйте)<br/></li>
+                <li>CSM: Disable (по возможности)<br/><br/><b>Legacy bios:</b><br/></li>
+                <li>AHCI: enable; <br/></li>
+                <li>HPET: enable;<br/></li>
+                <li>Vt-d: disable;<br/></li>
+                <li>ACPI Suspend Type - S3 (Only); <br/></li>
+                <li>No Execute memory - enable;<br/></li>
+                <li>USB Legacy - enable;<br/></li>
+                <li>Отключаем всю периферию (вебки, смарты, блютуз-свистки, кард-ридеры и т.д.)</li>
+            </ol>
+            <br/>. ...<br/>&#91;i&#93;Примечание:<br/>
+            <ol type="1">
+                <li>HDD должен быть подключен к SATA-0, контролер Intel.<br/></li>
+                <li>...&#91;/i&#93;</li>
+            </ol>
+            <br/></div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <b>Установка macOS через Boot Disk Utility</b></div>
+        <div class="block-body"><br/>Для установки потребуется флешка не менее 8Гб. <br/>
+            <ol type="1">
+                <li>ПК на ОС Windows XP/7/8.<br/></li>
+                <li>Скачать утилиту Boot Disk Utility с <a title="Ссылка" rel="nofollow"
+                                                           href="http://cvad-mac.narod.ru/index/0-5" target="_blank">страницы
+                    разработчика cvad</a> или с форума applelife.ru со страницы <a title="Ссылка" rel="nofollow"
+                                                                                   href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/"
+                                                                                   target="_blank">посвящённой данной
+                    утилите.</a><br/></li>
+                <li>Установить по <a title="Ссылка" rel="nofollow"
+                                     href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/"
+                                     target="_blank">инструкции</a><br/></li>
+                <li>Зайти на флешку в папку EFI\CLOVER\ и удалить папку OEM и файл config-sample <i>(не путать с
+                    config.plist)</i>.<br/></li>
+                <li>Скачать образ Mac OS X по указанным ссылкам:<br/><a title="Ссылка" rel="nofollow"
+                                                                        href="https://applelife.ru/posts/557498"
+                                                                        target="_blank"><b>Нажми и качай!</b></a><br/>
+                </li>
+                <li>Развернуть скаченный образ на подготовленную флешку.
+                    <ol type="1">
+                        <li>Инструкция с applelife.ru пункт <a title="Ссылка" rel="nofollow"
+                                                               href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/"
+                                                               target="_blank">"<i>Заливка дистрибутива macOS на второй
+                            том загрузочного USB Flash drive:</i>"</a>:<br/></li>
+                        <li>В основном окне программы -&gt; Destination Disk - выбираем наш USB Flash Drive -&gt; Part2.<br/>
+                        </li>
+                        <li>Нажимаем кнопку "Restore Partition".<br/></li>
+                        <li>В открывшемся окне проводника выбираем распакованный файл с расширением *.hfs.</li>
+                    </ol>
+                </li>
+                <li>Тем, кто устанавливает на ноутбук<span style="font-size:8pt;line-height:100%"><i> (или имеет PS/2 мышь или клавиатуру)</i></span>,
+                    обязательно скачать <a class="ipb-attach attach-file"
+                                           href="//4pda.ru/forum/dl/post/4617905/VoodooPS2Controller.kext.zip"
+                                           data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+                                           title="Скачать VoodooPS2Controller.kext.zip" target="_blank"><img
+                            src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                            alt="Прикрепленный файл" style="margin-right:3px;"/>VoodooPS2Controller.kext.zip</a> ( 97,46
+                    КБ )<br/>, новая версия: <a class="ipb-attach attach-file"
+                                                href="//4pda.ru/forum/dl/post/9410133/VoodooPS2Controller.kext.zip"
+                                                data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+                                                title="Скачать VoodooPS2Controller.kext.zip" target="_blank"><img
+                            src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                            alt="Прикрепленный файл" style="margin-right:3px;"/>VoodooPS2Controller.kext.zip</a> ( 93,86
+                    КБ )<br/> положить в папку EFI/CLOVER/KEXT/10.X или Other<br/></li>
+                <li>Всё, установочная флешка готова, можно приступать к установке.</li>
+            </ol>
+            <br/><br/><i><b>За данный споcоб установки благодарим cvad и Skvo</b></i> <br/><i>Данная инструкция написана
+                по материалам с applelife.ru</i></div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <b>После установки</b></div>
+        <div class="block-body"><br/>Установить один из загрузчиков на диск <span
+                style="font-size:8pt;line-height:100%">(<i>если он не входит в состав сборки</i>)</span>: <br/>- <a
+                title="Ссылка" rel="nofollow" href="http://sourceforge.net/projects/cloverefiboot/?source=pdlp"
+                target="_blank">Загрузчик №1 - Clover</a> <i><b>(рекомендуем)</b></i>;<br/><i>Как это сделать:</i> <a
+                title="Ссылка" rel="nofollow"
+                href="//4pda.ru/forum/index.php?showtopic=84979&st=4740&view=findpost&p=31561690" target="_blank"><i>UEFI</i></a>,
+            <a title="Ссылка" rel="nofollow"
+               href="//4pda.ru/forum/index.php?showtopic=84979&st=4420&view=findpost&p=31174480" target="_blank"><i>Legacy
+                BIOS</i></a>. <br/>- <a title="Ссылка" rel="nofollow"
+                                        href="http://www.osx86.net/files/category/3-bootloaders/" target="_blank">Загрузчик
+                №2 - Chameleon</a> (на данный момент существует для очень старых систем и особых случаев);<br/><i><span
+                    style="font-size:8pt;line-height:100%">*загрузчик устанавливаем только один, на ваш выбор</span></i><br/><br/><b>После
+                входа в macOS первое, что делаем:</b> <br/>
+            <ol type="1">
+                <li>Устанавливаем кекст для сетевой карты; <br/></li>
+                <li>Настраиваем SMbios;<br/></li>
+                <li>"Заводим" видео-карту <i>(разрешение должно быть правильным, и верхняя строка прозрачная);</i><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31411055" target="_blank">Поднимаем
+                    "нативное управление питанием" процессора</a>;<br/></li>
+                <li>Поднимаем звук через AppleALC или VoodooHDA</li>
+            </ol>
+            <br/>...<br/>21. Ставим програмулинки и "рюшечки".
+        </div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            Видео, Звук, USB, Сеть, прочее:
+        </div>
+        <div class="block-body">
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Процессор:
+                </div>
+                <div class="block-body">
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31411055"
+                               target="_blank">Инструкция по заведению P&C-States (SpeedStep) на процессорах
+                            Core2Duo/Sandy Bridge/Ivy Bridge/Haswell через Clover.</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="http://osxpc.ru/zavod/cpu-zavod/hackintosh-pentium-haswell/" target="_blank">Pentium
+                            и Celeron (Haswell-LGA1150)</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/entries/rabotaet-li-spidstep.108/" target="_blank">Работает ли
+                            спидстеп?</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.applelife.ru/threads/ivy-bridge-haswell-speedstep-turboboost.38283/"
+                               target="_blank">Ivy Bridge, Haswell - SpeedStep & TurboBoost</a></li>
+                    </ul>
+                    <br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Видео:
+                </div>
+                <div class="block-body"><span style="font-size:10pt;line-height:100%"><ul><li><a title="Ссылка"
+                                                                                                 rel="nofollow"
+                                                                                                 href="https://applelife.ru/threads/1289648"
+                                                                                                 target="_blank"><b>Актуальная</b> инструкция по заводу Intel HD Graphics 3000/4000/4600/5000/530/630... </a><br/><br/></li><li><a
+                        title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/1546195/" target="_blank">Завод Nvidia Maxwell и Pascal (GTX750*, 9*, 10*)</a><br/><br/></li><li><a
+                        title="Ссылка" rel="nofollow"
+                        href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32265264" target="_blank">Завод видеокарт Intel HD4000/4400/4600/5000. Отключение видеокарт NVIDIA.</a><br/><br/></li><li><a
+                        title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/28890" target="_blank">ATI HD4xx0, HD5xx0; AMD HD6xx0, HD7xx0, R5, R7, R9, RX, Vega</a><br/><br/></li><li><a
+                        title="Ссылка" rel="nofollow"
+                        href="//4pda.ru/forum/index.php?showtopic=84979&st=4840&view=findpost&p=31658497"
+                        target="_blank">Отключение видеокарт NVidia в ноутбуках с технологией Optimus</a></li></ul></span><br/>
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45486199"
+                               target="_blank">Заводим видеокарты на 10.11.2 (EL Capitan) NVIDIA 780/680/285/120/8800
+                            GT/Quadro K5000, Quadro 4000/Quadro FX 4800, Quadro FX 5600</a>.<br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/intel-hd3000-hd4000-hd4600-hd5000-nd5500-hd5600-hd520-hd530.1289648/"
+                               target="_blank">Intel HD3000 HD4000 HD4600 HD5000 НD5500 HD5600 HD520 HD530</a> <a
+                                title="Ссылка" rel="nofollow"
+                                href="https://applelife.ru/threads/ustanovka-macos-sierra-10-12-na-intel-pc.1367064/page-421#post-634198"
+                                target="_blank">Desktop HD530</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow" href="http://osxpc.ru/category/zavod/gpu/" target="_blank">Заводим
+                            видеокарты, инструкции от osxpc.ru</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/reguljator-jarkosti-dlja-hd3000-hd4000-hd4600-odnim-slovom-acpibacklight.688531/"
+                               target="_blank">Регулятор яркости для HD3000, HD4000, HD4600 (одним словом
+                            ACPIBacklight)</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.cmd-help.ru/как-завести-intel-hd-graphics-на-mac-os-x-10-11-el-capitan/"
+                               target="_blank">Intel HD Graphics на Mac OS X 10.11 El Capitan</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.tonymacx86.com/threads/kaby-lake-hd620-working.209598/"
+                               target="_blank">Kaby Lake HD620</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=58075541"
+                               target="_blank">Заводим Kaby Lake Intel HD630 на dekstop</a><br/></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Звук:
+                </div>
+                <div class="block-body">
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/applealc-dinamicheskij-patching-applehda.1171672/"
+                               target="_blank">AppleALC — динамический патчинг AppleHDA</a> | <a title="Ссылка"
+                                                                                                 rel="nofollow"
+                                                                                                 href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=57190685"
+                                                                                                 target="_blank">Инструкция
+                            на пальцах как поднять звук через AppleALC</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40629650"
+                               target="_blank">Мануалы по VooooHDA.kext</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=50669573"
+                               target="_blank">Установка и настройка VoodooHDA.kext</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.applelife.ru/threads/delaem-zvuk-na-osnove-voodoohda.18413/"
+                               target="_blank">Оригинальная тема по VoodooHDA</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=57173635"
+                               target="_blank">AppleHDA Patcher v1.8 by Micky1979 and Mirone</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Сеть:
+                </div>
+                <div class="block-body">
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/ustanovka-os-x-s-pomoschju-bdu-i-obraza-recoveryhd.1154924/page-5#post-613981"
+                               target="_blank">https://applelife.ru/t…924/page-5#post-613981</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.insanelymac.com/forum/forums/topic/287161-new-driver-for-realtek-rtl8111/"
+                               target="_blank">https://www.insanelyma…r-for-realtek-rtl8111/</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.insanelymac.com/forum/forums/topic/304235-intelmausiethernetkext-for-intel-onboard-lan/"
+                               target="_blank">https://www.insanelyma…for-intel-onboard-lan/</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://www.insanelymac.com/forum/forums/topic/286937-realtekr1000-v3/"
+                               target="_blank">https://www.insanelyma…86937-realtekr1000-v3/</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/realtek-rtl8111-8168x-b-c-d-e-f-g-h-rtl8100x-lan-nic-by-mieze.1177689/"
+                               target="_blank">https://applelife.ru/t…-nic-by-mieze.1177689/</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/realtek-rtl8111f-8168x-ispravlennyj-drajver.37061/"
+                               target="_blank">https://applelife.ru/t…vlennyj-drajver.37061/</a><br/></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    USB:
+                </div>
+                <div class="block-body">
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://bitbucket.org/RehabMan/os-x-usb-inject-all/downloads" target="_blank">https://bitbucket.org/…b-inject-all/downloads</a><br/>
+                        </li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/nastrojka-usb-v-10-11-10-13.627190/page-18#post-550233"
+                               target="_blank">https://applelife.ru/t…90/page-18#post-550233</a><br/></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    MacAppStore и iCloud; iMessage и FaceTime:
+                </div>
+                <div class="block-body">
+                    <ul>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30937780"
+                               target="_blank">Заводим/настраиваем iMessage, FaceTime.</a><br/></li>
+                        <li><a title="Ссылка" rel="nofollow"
+                               href="https://applelife.ru/threads/nastrojka-appstore-imessage-i-icloud-v-os-x.40790/page-130#post-609733"
+                               target="_blank">Настройка AppStore, iMessage и iCloud в OS X 10.12</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <b><span style="color:red">Решение проблем</span></b></div>
+        <div class="block-body">
+            <ol type="1">
+                <li><a title="Ссылка" rel="nofollow"
+                       href="https://applelife.ru/threads/panic-cpu-panika-varianty-reshenija.42135/"
+                       target="_blank"><span style="color:red">Варианты "panic"<i>(остановка загрузки)</i> на этапе установки OS X и их решение</span></a><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31137303" target="_blank">Паника
+                    AppleIntelCPUPowerManagement <b><span
+                            style="color:red">&lt;= очень распространённая проблема!</span></b></a><br/></li>
+                <li>Решение ошибки <a title="Ссылка" rel="nofollow"
+                                      href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=57053567"
+                                      target="_blank">Черный экран с ++++++++++++++++++</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32257410" target="_blank">Останавливается
+                    на загрузке "&#91;IOBluetoothHCIController&#93;&#91;SearchForTransportEventTimeOutHandler&#93; --
+                    Missing Bluetooth Controller Transport</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30945519" target="_blank">Исправление
+                    ошибки "boot error" в Clover вариант №1</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32540139" target="_blank">Исправление
+                    ошибки "boot error" в Clover вариант №2</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=34105771" target="_blank">Исправление
+                    ошибки "boot error" в Clover/Chameleon от</a> <a title="Ссылка" rel="nofollow"
+                                                                     href="//4pda.ru/forum/index.php?showuser=3887317"
+                                                                     target="_blank">Bobko_904</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=79185441" target="_blank">Если
+                    после установки <b>Windows</b> не загружается Clover</a> | <a title="Ссылка" rel="nofollow"
+                                                                                  href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=79189447"
+                                                                                  target="_blank">2 способ</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37367017" target="_blank">Решение
+                    проблемы с отображением времени в Windows</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=71192668" target="_blank">Если
+                    на Nvidia GTX 750Ti работает только VGA</a></li>
+            </ol>
+        </div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <b>Полезные ссылки</b></div>
+        <div class="block-body">
+            <ol type="1">
+                <li><a title="Ссылка" rel="nofollow"
+                       href="https://applelife.ru/threads/delaem-zagruzochnuju-clover-fleshku-s-macosx-iz-windows.37189/"
+                       target="_blank">Boot Disk Utility - создание загрузочной флешки из под Windows.</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="http://sourceforge.net/projects/cloverefiboot/?source=pdlp&quot;" target="_blank">Clover -
+                    скачать EFI загрузчик.</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/clover.42089/" target="_blank">Clover
+                    - обсуждение на applelife.ru</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://sourceforge.net/projects/hwsensors/?source=navbar"
+                       target="_blank">HWmonitor - мониторинг всех показателей системы</a> | <a title="Ссылка"
+                                                                                                rel="nofollow"
+                                                                                                href="http://hwsensors.com/"
+                                                                                                target="_blank">hwsensors</a>
+                    | <a title="Ссылка" rel="nofollow"
+                         href="https://applelife.ru/threads/fakesmc-i-monitoring-vsego.24475/" target="_blank"><i>Обсуждение
+                        на applelife.ru</i></a>. <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/latest-kext-utility.41036/"
+                       target="_blank">Kext Utility - Восстановление прав в системе, установка кекстов.</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://www.hackintoshosx.com/files/category/3-bootloaders/"
+                       target="_blank">Chameleon</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://www.hackintoshosx.com/" target="_blank">База драйверов
+                    (kext) для Hackintosh</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://www.insanelymac.com" target="_blank">Хороший
+                    зарубежный форум по хакинтошам (insanelymac)</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://wiki.osx86project.org" target="_blank">Wiki-база по
+                    совместимому железу (wiki.osx86project)</a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://applelife.ru" target="_blank"><span
+                        style="color:darkblue"><b>Лучший форум по хакинтошам (applelife.ru)</b></span></a> <br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewforum.php?f=1366"
+                       target="_blank">Ветка Rutracker.org по макам (ритейлы, сборки, софт)</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30931033" target="_blank">Установка
+                    Mac OS X 10.9.2 - 10.10.3 на Lenovo A730</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31174480" target="_blank">Установка
+                    Clover на жёсткий диск для Legacy bios (<i>старые материнские платы</i>)</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31561690" target="_blank">Установка
+                    Clover на жёсткий диск для UEFI материнских плат.</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://bitbucket.org/blackosx/darwindumper/downloads"
+                       target="_blank">DarwinDumper - утилита для снятия полного отчёта о системе.</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31414927"
+                       target="_blank"><span style="color:crimson"><b>Редакторы config.plist</b></span></a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=29196063" target="_blank">Как
+                    установить kext в Mac OS X</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?showtopic=84979&st=4840&view=findpost&p=31658783"
+                       target="_blank">Как удалить кекст в Mac OS X</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31996682" target="_blank">Изменение
+                    разметки диска с MBR в GPT без потери данных</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=54114705" target="_blank">Как
+                    конвертировать жесткий диск с установленной Windows 10 c MBR на GPT без потери данных!</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32236021" target="_blank">Как
+                    включить режим Dark Graphite в OS X 10.10 Yosemite</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32506503" target="_blank">Как
+                    включить USB-Bluetooth на чипе CSR</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31608696" target="_blank">Обновление
+                    Mac OS X 10.8.5 на Mac OS X 10.9 Mavericks</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=30310122" target="_blank">
+                    Способ №1 Активация TRIM на SSD, фикс "оранжевых" иконок в Clover</a> | <a title="Ссылка"
+                                                                                               rel="nofollow"
+                                                                                               href="//4pda.ru/forum/index.php?showtopic=84979&st=26240&view=findpost&p=56890488"
+                                                                                               target="_blank">Способ
+                    №2</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=32821554" target="_blank">Создание
+                    флешки для установки Windows на диск с Mac OS X</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=34067211"
+                       target="_blank"><span style="color:darkred"><b>Создание загрузочной флешки Mac OS X Mavericks  или Yosemite с загрузчиком Clover</b></span></a><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37150265" target="_blank">Elan
+                    Touchpad Driver для ноутбуков</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=37266737" target="_blank">Создаем
+                    Legacy kext для Bluetooth</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40595142"
+                       target="_blank"><span style="color:teal"><b>Скриншоты GUI Clover</b></span></a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=40610502"
+                       target="_blank"><span style="color:red"><b>Назначений ключей <i>(boot arguements)</i> в загрузчике Clover</b></span></a><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45378314" target="_blank">Как
+                    получить доступ из Windows к EFI разделу (тут прячется клевер) на Mac OS</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=45522785" target="_blank">Установка
+                    Mac Os X на ноутбуки семейства Asus N/k/s Core I 3\5\7 Ivy Bridge.</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=47357233"
+                       target="_blank"><b><span style="color:red">Установка Винды и Мака на один жесткий диск</span></b></a><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=36925759" target="_blank">Краткое
+                    описание кекстов: FakeSMC.kext, AppleHDA.kext и т.д.</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?showtopic=84979&view=findpost&p=50372231" target="_blank">Как
+                    восстановить EFI раздел HDD Mac OS X</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=51228255" target="_blank"><b>Сборник
+                    полезных программ в одном архиве</b></a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://applelife.ru/threads/nastrojka-usb-v-10-11.627190/"
+                       target="_blank">Настройка USB в 10.11</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=753765&view=findpost&p=56893758"
+                       target="_blank"><span style="color:blue"><b>Патчи для macOS Sierra и SkyLake</b></span></a><br/>
+                </li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=59891628" target="_blank"><b>FakeSMC
+                    + HWSensors с поддержкой Kaby Lake</b></a>\<br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="http://toklovich.ru/ustanavlivaem-mac-os-x-na-semeystvo-noutbukov-hp-probook-elitebook/"
+                       target="_blank">Устанавливаем Mac OS X на семейство ноутбуков HP ProBook, Elitebook</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://habrahabr.ru/post/318448/" target="_blank">Разворачиваем
+                    macOS Sierra на Intel-PC подробно и понятно</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://support.apple.com/ru-ru/HT201372" target="_blank">Создание
+                    загружаемого установщика для macOS с apple.com</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow" href="https://support.apple.com/ru-ru/HT201361" target="_blank">Как
+                    делать снимки экрана на компьютере Mac</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="https://applelife.ru/threads/osx-na-pentium-celeron-haswell.41764/page-5#post-608521"
+                       target="_blank">Установка OS X на Haswell Pentium/Celeron</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="https://ddr5.ru/ustanovka-hackintosh-pri-pomoshhi-bdu-i-recovery-obraza/" target="_blank">Установка
+                    Hackintosh при помощи BDU и Recovery образа</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=65517273" target="_blank">Fix
+                    for ICH10 with High Sierra</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=67951887" target="_blank">Скрипт
+                    по созданию загрузочной Windows UEFI-флешки из под macOS</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="https://yablyk.com/956788-kak-nastroit-menyu-ob-etom-mac-na-svoj-vkus/" target="_blank">Как
+                    изменить данные железа в разделе «Об этом Mac» на любые другие</a><br/></li>
+                <li><a title="Ссылка" rel="nofollow"
+                       href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=62112835" target="_blank">Создаем
+                    "правильную" загрузочную флешку с macOS Higt Sierra 10.13.4</a></li>
+            </ol>
+            <br/><br/></div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <b>Актуальные сборки:</b></div>
+        <div class="block-body">
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    macOS Sierra 10.12-10.14
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/posts/557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.14 для BDU</b></a><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    OS X El Capitan 10.11
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow" href="https://applelife.ru/posts/557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.14 для BDU</b></a><br/><a
+                        title="Ссылка" rel="nofollow" href="https://inmac.org/topic/32811/" target="_blank">OS X El
+                    Capitan 10.11 &#91;Mac & PC установленный образ&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                                                    href="https://inmac.org/topic/33485/"
+                                                                                    target="_blank">Загрузочный раздел
+                    (5.hfs) с инсталлятором OS X 10.11.1 (15B42) - для BootDiskUtility.</a><br/><a title="Ссылка"
+                                                                                                   rel="nofollow"
+                                                                                                   href="https://inmac.org/topic/35721/"
+                                                                                                   target="_blank">OS X
+                    El Capitan 10.11.5 &#91;MAS&#93; &#91;15F34&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                                                href="https://inmac.org/topic/33357/"
+                                                                                target="_blank">OS X El Capitan 10.11.5
+                    &#91;Установочный ISO&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                          href="https://inmac.org/topic/33456/" target="_blank">Загрузочный
+                    раздел (5.hfs) с инсталлятором OS X 10.10.5 (14F27) - для BootDiskUtility.</a><br/><a title="Ссылка"
+                                                                                                          rel="nofollow"
+                                                                                                          href="http://rutracker.org/forum/viewtopic.php?t=5020993"
+                                                                                                          target="_blank">OS
+                    X El Capitan 10.11.5 (15F34) &#91;Intel&#93; (Флешка для установки) Legacy, UEFI, MBR, GPT.</a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5226768"
+                        target="_blank">OS X El Capitan 10.11.5 &#91;Mac App Store&#93; (Установочный)</a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=5030423"
+                        target="_blank">OS X El Capitan 10.11.3 (15D21) &#91;Intel&#93; MBR (Установленная
+                    система)</a><br/><a title="Ссылка" rel="nofollow"
+                                        href="http://rutracker.org/forum/viewtopic.php?t=5077339" target="_blank">&#91;RUS&#93;
+                    OS X El Capitan 10.11.4 + clover 3389&#91;Intel&#93;</a><br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    OS X Yosemite 10.10
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow"
+                                           href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755224"
+                        target="_blank">Образ установленной OS X Yosemite 10.10.1 для разворачивания через R-Drive
+                    MBR.</a><br/><a title="Ссылка" rel="nofollow"
+                                    href="http://rutracker.org/forum/viewtopic.php?t=4755796" target="_blank">OS X
+                    Yosemite 10.10.1 (14B25) &#91;Intel&#93; (Флешка для установки) + MBR patch</a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4755224"
+                        target="_blank">OS X Yosemite 10.10.1 (14B25) (Установленная система для быстрой и легкой
+                    установки)</a><br/><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/28093"
+                                          target="_blank"><b>OS X Yosemite 10.10 GM 14A389</b> <span
+                        style="font-size:8pt;line-height:100%"><i>(с inmac.org )</i></span></a><br/><a title="Ссылка"
+                                                                                                       rel="nofollow"
+                                                                                                       href="http://rutracker.org/forum/viewtopic.php?t=4755796"
+                                                                                                       target="_blank">OS
+                    X Yosemite 10.10.1 (14B25) &#91;Intel&#93; (Флешка для установки) + MBR patch</a><br/><a
+                        title="Ссылка" rel="nofollow" href="https://inmac.org/topic/29613/" target="_blank">OS X
+                    Yosemite 10.10.2 (14C109) - для BootDiskUtility</a><br/><a title="Ссылка" rel="nofollow"
+                                                                               href="https://inmac.org/topic/30694/"
+                                                                               target="_blank">OS X Yosemite 10.10.3
+                    (14D131) - для BootDiskUtility</a><br/><a title="Ссылка" rel="nofollow"
+                                                              href="https://inmac.org/topic/28301/" target="_blank">OS X
+                    Yosemite 10.10 (14A389) - для BootDiskUtility</a><br/><a title="Ссылка" rel="nofollow"
+                                                                             href="https://inmac.org/topic/28647/"
+                                                                             target="_blank">OS X Yosemite 10.10.1 &#91;MAS&#93;</a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4893965"
+                        target="_blank">OS X Yosemite 10.10.1 &#91;Intel, AMD&#93;</a><br/><a title="Ссылка"
+                                                                                              rel="nofollow"
+                                                                                              href="https://inmac.org/topic/29650/"
+                                                                                              target="_blank">OS X
+                    Yosemite 10.10.2 &#91;Mac & PC установленный образ&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                                                       href="https://inmac.org/topic/30689/"
+                                                                                       target="_blank">OS X Yosemite
+                    10.10.3 &#91;Mac & PC установленный образ&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                                              href="http://rutracker.org/forum/viewtopic.php?t=4981363"
+                                                                              target="_blank">OS X Yosemite 10.10.3 +
+                    clover <i>(Разворачиваем образ через Transmac из под винды.)</i></a><br/><a title="Ссылка"
+                                                                                                rel="nofollow"
+                                                                                                href="https://inmac.org/topic/31639/"
+                                                                                                target="_blank">OS X
+                    Yosemite 10.10.4 (14E46) &#91;MAS&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                                      href="https://inmac.org/topic/31666/"
+                                                                      target="_blank">OS X Yosemite 10.10.4 &#91;Mac &
+                    PC установленный образ&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                           href="https://inmac.org/topic/32154/" target="_blank">OS X
+                    Yosemite 10.10.5 &#91;MAS&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                              href="https://inmac.org/topic/33456/" target="_blank">OS X
+                    Yosemite 10.10.5 (14F27) - для BootDiskUtility</a><br/><a title="Ссылка" rel="nofollow"
+                                                                              href="https://inmac.org/topic/32313/"
+                                                                              target="_blank">OS X Yosemite 10.10.5
+                    &#91;Установочный ISO&#93;</a><br/><a title="Ссылка" rel="nofollow"
+                                                          href="http://osxamd.ru/own-image/" target="_blank">OS X
+                    Yosemite 10.10.5 для AMD</a><br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Mac OS X 10.9 Mavericks
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow"
+                                           href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br/><b>Образы
+                    с inmac.org</b> <br/><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/24290/"
+                                            target="_blank">OS X Mavericks 10.9.1 Boot Disk Utility.</a> <br/><a
+                        title="Ссылка" rel="nofollow" href="https://inmac.org/topic/25737/" target="_blank">OS X
+                    Mavericks 10.9.2 Boot Disk Utility.</a><br/><a title="Ссылка" rel="nofollow"
+                                                                   href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31874281"
+                                                                   target="_blank">OS X Mavericks 10.9.3 Boot Disk
+                    Utility.</a><br/><a title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27191/"
+                                        target="_blank">OS X Mavericks 10.9.4 Boot Disk Utility</a>.<br/><a
+                        title="Ссылка" rel="nofollow" href="https://inmac.org/topic/27796/" target="_blank">OS X
+                    Mavericks 10.9.5 Boot Disk Utility.</a><br/><a title="Ссылка" rel="nofollow"
+                                                                   href="http://www.mediafire.com/folder/s4qc57b5pji2d/OS_X_for_BDU"
+                                                                   target="_blank">OS X Mavericks 10.9.X Boot Disk
+                    Utility зеркало на mediafire</a><br/><a title="Ссылка" rel="nofollow"
+                                                            href="https://inmac.org/topic/27785/" target="_blank">OS X
+                    Mavericks 10.9.5 + загрузчик Clover</a><br/><a title="Ссылка" rel="nofollow"
+                                                                   href="https://inmac.org/topic/27790/"
+                                                                   target="_blank">OS X Mavericks 10.9.5 &#91;Mac & PC
+                    установленный образ&#93;</a><br/><b>Образы с rutracker.org</b><br/><a title="Ссылка" rel="nofollow"
+                                                                                          href="https://inmac.org/topic/27796/"
+                                                                                          target="_blank">OS X Mavericks
+                    10.9.5 Boot Disk Utility.</a><br/><a title="Ссылка" rel="nofollow"
+                                                         href="http://rutracker.org/forum/viewtopic.php?t=4622382"
+                                                         target="_blank">OS X Mavericks 10.9.1 &#91;Intel&#93; +
+                    Clover</a> <br/><a title="Ссылка" rel="nofollow"
+                                       href="http://rutracker.org/forum/viewtopic.php?t=4679601" target="_blank">OS X
+                    Mavericks 10.9.3 (13D65) &#91;Intel&#93; + Clover (MBR or GUID)</a> <br/><a title="Ссылка"
+                                                                                                rel="nofollow"
+                                                                                                href="http://rutracker.org/forum/viewtopic.php?t=4470864"
+                                                                                                target="_blank">Флешка
+                    для самостоятельной установки OS X Mavericks 10.9.3 (13C64) MAS</a> <br/><a title="Ссылка"
+                                                                                                rel="nofollow"
+                                                                                                href="https://dark-os.com/viewtopic.php?t=150830"
+                                                                                                target="_blank">Флешка
+                    для самостоятельной установки OS X Mavericks 10.9 &#91;Intel/AMD&#93;</a> <br/><a title="Ссылка"
+                                                                                                      rel="nofollow"
+                                                                                                      href="http://rutracker.org/forum/viewtopic.php?t=4690725"
+                                                                                                      target="_blank">Флешка
+                    для самостоятельной установки OS X Mavericks 10.9 &#91;Intel/AMD&#93; <i>(с
+                        http://rutracker.org)</i></a> <br/><a title="Ссылка" rel="nofollow"
+                                                              href="http://rutracker.org/forum/viewtopic.php?t=4462718"
+                                                              target="_blank">OS X Mavericks 10.9.4 (13E28) &#91;Intel&#93;
+                    (Установленная система для быстрой и легкой установки) MAS *(only MBR)</a> <br/><a title="Ссылка"
+                                                                                                       rel="nofollow"
+                                                                                                       href="http://rutracker.org/forum/viewtopic.php?t=4462718"
+                                                                                                       target="_blank">OS
+                    X Mavericks 10.9.5</a><br/><a title="Ссылка" rel="nofollow"
+                                                  href="http://rutracker.org/forum/viewtopic.php?t=4679601"
+                                                  target="_blank">OS X Mavericks 10.9.5 (13F34) &#91;Intel&#93; +
+                    Clover</a><br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Mac OS X 10.8 Mountain Lion
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow"
+                                           href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4121627"
+                        target="_blank">Флешка для самостоятельной установки Mountain Lion 10.8.5&#91;Intel&#93;</a>
+                    <br/><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=4029581"
+                            target="_blank">Mac OS X Mountain Lion 10.8.5 &#91;Установленная система. Простая и быстрая
+                        установка&#93;&#91;Intel&#93;</a> <br/><a title="Ссылка" rel="nofollow"
+                                                                  href="http://rutracker.org/forum/viewtopic.php?t=4152164"
+                                                                  target="_blank">OS X Mountain Lion Install DVD 10.8.2
+                        &#91;Intel&#93;</a> <br/><a title="Ссылка" rel="nofollow"
+                                                    href="http://rutracker.org/forum/viewtopic.php?t=4309922"
+                                                    target="_blank">iAtkos ML2 (OS X Mountain Lion 10.8.2) для
+                        USB-флешки &#91;Intel&#93;</a> <br/><a title="Ссылка" rel="nofollow"
+                                                               href="http://rutracker.org/forum/viewtopic.php?t=4222713"
+                                                               target="_blank">Os X Mountain Lion 10.8.2 (Образ для
+                        VMware)&#91;Intel&#93;</a> <br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Mac OS X 10.7 Lion
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow"
+                                           href="https://applelife.ru/threads/mac-osx-i-clover-iz-windows-izgotovlenie-zagruzochnoj-flehshki.37189/page-57#post-557498"
+                                           target="_blank"><b>Образы* OS X от 10.7.5 до 10.12.1 для BDU</b></a><br/><a
+                        title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3968290"
+                        target="_blank">Флешка для самостоятельной установки Mac OS X Lion 10.7.5 &#91;Intel&#93;</a>
+                    <br/><a title="Ссылка" rel="nofollow" href="http://rutracker.org/forum/viewtopic.php?t=3936738"
+                            target="_blank">Mac OS X 10.7.3 Install DVD </a> <br/><a title="Ссылка" rel="nofollow"
+                                                                                     href="http://rutracker.org/forum/viewtopic.php?t=3826338"
+                                                                                     target="_blank">iAtkos L2 (OS X
+                        Lion 10.7.2) </a> <br/><br/></div>
+            </div>
+            <div class="post-block spoil close">
+                <div class="block-title"
+                     title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+                    Mac OS X 10.6 Snow Leopard
+                </div>
+                <div class="block-body"><a title="Ссылка" rel="nofollow"
+                                           href="http://rutracker.org/forum/viewtopic.php?t=3739310" target="_blank">Mac
+                    OS X Snow Leopard - 10.6.8 (установленная система. Простая и быстрая установка)
+                    &#91;AMD/Intel&#93;</a> <br/><a title="Ссылка" rel="nofollow"
+                                                    href="http://rutracker.org/forum/viewtopic.php?t=3028010"
+                                                    target="_blank">iAtkos S3 10.6.3 ver.2</a> <br/><a title="Ссылка"
+                                                                                                       rel="nofollow"
+                                                                                                       href="http://rutracker.org/forum/viewtopic.php?t=2922803"
+                                                                                                       target="_blank">Mac
+                    OS X Snow Leopard Install DVD (Retail) - 10.6.3</a> <br/><br/></div>
+            </div>
+        </div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            <span style="color:red"><b><span style="font-size:10pt;line-height:100%">Как правильно задать вопрос</span></b></span>
+        </div>
+        <div class="block-body"><br/>Задавая вопрос указывайте: <br/>Процессор: Intel i7 4770; <br/>Материнская плата:
+            GA-Z87-DH3; <br/>Видеокарту: NV GTX660; <br/>Загрузчик:<br/><i>Clover – 4011;<br/>Chameleon – 2258;
+            </i><br/>Версия macOS; <br/>Прикрепляем скрин с проблемой и прячем его под спойлер. <br/>Если вы желаете
+            получить помощь в этой теме, <b><span style="color:red">настоятельно рекомендуется</span></b> занести
+            описание комплектующих в <a title="Ссылка" rel="nofollow"
+                                        href="//4pda.ru/forum/index.php?act=UserCP&CODE=22" target="_blank"><b><i>подпись</i></b></a>:
+            <span style="font-size:8pt;line-height:100%"><i>(пример: Процессор/Материнская плата/Видеокарта/Загрузчик).</i></span><br/>
+            <div class="post-block code box">
+                <div class="block-title"></div>
+                <div class="block-body noemoticons">&#91;b&#93;Процессор: &#91;/b&#93; | &#91;b&#93;Материнская плата:&#91;/b&#93;
+                    | &#91;b&#93;Видеокарта:&#91;/b&#93; | &#91;b&#93;Версия ОС и загрузчик:&#91;/b&#93;<br/>&#91;spoiler=Скриншоты
+                    проблемы&#93;Здесь прикрепляем скриншоты или фото&#91;/spoiler&#93;<br/></div>
+            </div>
+            <br/></div>
+    </div>
+    <div class="post-block spoil close">
+        <div class="block-title"
+             title="Открыть этот спойлер - Click или Touch&#10;Открыть все спойлеры на странице - Ctrl+Click или LongTouch">
+            Мануалы по Clover
+        </div>
+        <div class="block-body"><b><span style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a
+                class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/8823074/Klever_cveta_xaki_3545.zip"
+                data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+                title="Скачать Klever_cveta_xaki_3545.zip" target="_blank"><img
+                src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_3545.zip</a> ( 4,18 МБ )<br/><br/><b><span
+                style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a class="ipb-attach attach-file"
+                                                                              href="//4pda.ru/forum/dl/post/9629581/Klever_cveta_xaki_4000.zip"
+                                                                              data-rel="lyteframe"
+                                                                              rev="width:728px;height:628px;scrolling:no;"
+                                                                              title="Скачать Klever_cveta_xaki_4000.zip"
+                                                                              target="_blank"><img
+                src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_4000.zip</a> ( 3,77 МБ )<br/><br/><b><span
+                style="color:silver">Мануал по Кловеру==&gt;&gt;</span></b><a class="ipb-attach attach-file"
+                                                                              href="//4pda.ru/forum/dl/post/11224919/Klever_cveta_xaki_4244.pdf.zip"
+                                                                              data-rel="lyteframe"
+                                                                              rev="width:728px;height:628px;scrolling:no;"
+                                                                              title="Скачать Klever_cveta_xaki_4244.pdf.zip"
+                                                                              target="_blank"><img
+                src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                alt="Прикрепленный файл" style="margin-right:3px;"/>Klever_cveta_xaki_4244.pdf.zip</a> ( 3,72 МБ
+            )<br/><br/><a class="ipb-attach attach-file"
+                          href="//4pda.ru/forum/dl/post/12255362/%CA%EB%E5%E2%E5%F0+%F6%E2%E5%F2%E0+%F5%E0%EA%E8+4415.zip"
+                          data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+                          title="Скачать Клевер цвета хаки 4415.zip" target="_blank"><img
+                    src="//s.4pda.to/JK4K4z1TwZaXZW4rDcCeM9VsPCxCcrJSUQZjz0Pwz2WtugILoR0z1d9I65FCe9bn.gif"
+                    alt="Прикрепленный файл" style="margin-right:3px;"/>Клевер цвета хаки 4415.zip</a> ( 3,68 МБ
+            )<br/><br/><a class="ipb-attach attach-file"
+                          href="//4pda.ru/forum/dl/post/12768703/%CA%EB%E5%E2%E5%F0+%F6%E2%E5%F2%E0+%F5%E0%EA%E8+4450.pdf"
+                          data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+                          title="Скачать Клевер цвета хаки 4450.pdf" target="_blank"><img
+                    src="//s.4pda.to/JK4KIcRdNMys1NxMyrdELf1jUsHpqmAv6LwP3Z0WNe2slRSC0alDMjhMH6z0D.gif"
+                    alt="Прикрепленный файл" style="margin-right:3px;"/>Клевер цвета хаки 4450.pdf</a> ( 4,05 МБ )<br/>
+        </div>
+    </div>
+    <br/><b>Актуальный мануал по Clover <span style="font-size:14pt;line-height:100%">&#8594;</span></b> <a
+            class="ipb-attach attach-file" href="//4pda.ru/forum/dl/post/13123526/431566_Klever_cveta_xaki_4542.pdf"
+            data-rel="lyteframe" rev="width:728px;height:628px;scrolling:no;"
+            title="Скачать 431566_Klever_cveta_xaki_4542.pdf" target="_blank"><img
+            src="//s.4pda.to/JK4KIcRdNMys1NxMyrdELf1jUsHpqmAv6LwP3Z0WNe2slRSC0alDMjhMH6z0D.gif" alt="Прикрепленный файл"
+            style="margin-right:3px;"/>431566_Klever_cveta_xaki_4542.pdf</a> ( 4,33 МБ )<br/><br/><span
+            style="color:darkblue"><b>Актуальный релиз Clover</b></span> <a title="Ссылка" rel="nofollow"
+                                                                            href="https://sourceforge.net/projects/cloverefiboot/"
+                                                                            target="_blank"><img alt="Изображение"
+                                                                                                 src="//s.4pda.to/JK4KGce6a8k9XcMNDwFz2XLpFpaqSI783tgwxekiZToT.png"/></a><br/>
+    <div align="center"><span style="font-size:12pt;line-height:100%"><span style="color:darkred"><b>Настройки, патчи, фиксы вносятся в файл EFI/CLOVER/</span><b>сonfig.plist</b>, <span
+            style="color:darkred">редактировать этот файл нужно</span> <a title="Ссылка" rel="nofollow"
+                                                                          href="//4pda.ru/forum/index.php?s=&showtopic=84979&view=findpost&p=31414927"
+                                                                          target="_blank"><b>этим</b></a>.</span><br/><span
+            style="font-size:10pt;line-height:100%"><span style="color:darkred"><b>В macOS порт VGA не работает, подключать монитор нужно к DVI-D/HDMI/DP. Eсть исключения для некоторых моделей. На графике Intel HD порт VGA не работает ни при каких ухищрениях!</b></span></span><br/><span
+            style="color:teal"><span style="font-size:12pt;line-height:100%"><b>При установке macOS наличие ключей -v debug=0x100 keepsyms=1 обязательно!</b></span><br/><span
+            style="color:crimson">При установке macOS High Sierra и новее обязателено добавьте <a title="Ссылка"
+                                                                                                  rel="nofollow"
+                                                                                                  href="//4pda.ru/forum/index.php?s=&showtopic=828222&view=findpost&p=74191081"
+                                                                                                  target="_blank">драйвер APFS</a> в Clover!</span></span></b>
+    </div>
+    <br/>
+    <div class="post-block tbl cur">
+        <div class="block-title">K</div>
+        <div class="block-body">
+            <div align="center"><b>Основное правило/требование темы: хотите получить помощь/совет - заполните свою
+                подпись, указав:</b><br/><span style="color:teal"><b>Процессор | Материнская плата | Видеокарта | Версия OS X | Загрузчик.</b></span><br/><span
+                    style="color:red"><b>Без подписи все сообщения удаляются.</b></span><br/></div>
+        </div>
+    </div>
+    <br/><br/><span class="edit">Сообщение отредактировал <a href="//4pda.ru/forum/index.php?showuser=1940031"
+                                                             target="_blank"><b>nikitenich</b></a> - 19.11.18, 20:21</span>
+</div>

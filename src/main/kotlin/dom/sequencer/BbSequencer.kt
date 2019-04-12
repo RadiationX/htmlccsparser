@@ -60,45 +60,19 @@ class BbSequencer {
 
 
     private fun printWidgetRec(bbNode: HtmlNode, bbParents: MutableList<HtmlNode> = mutableListOf()) {
-
-        var newBufferType = type
-        var bufferReleased = false
-
-        if (bbNode != rootNodeId) {
-            bbParents.add(bbNode)
-            newBufferType = if (!HtmlHelper.inline.contains(bbNode.name)) BbOp.Type.BLOCK else BbOp.Type.TEXT
-            bufferReleased = type != newBufferType
-
-
-            if (bbParents.isNotEmpty()) {
-                if (bufferReleased) {
-                    releaseBuffer(bbParents)
-                } else {
-                    appendBuffer(bbNode)
-                }
-            }
+        if (bbNode.name.let { it == null || it == HtmlNode.NODE_TEXT || it == HtmlNode.NODE_UNKNOWN || it == HtmlNode.NODE_COMMENT }) {
+            return
+        }
+        var newBufferType = if (HtmlHelper.inline.contains(bbNode.name)) {
+            BbOp.Type.TEXT
+        } else {
+            BbOp.Type.BLOCK
         }
 
-        type = newBufferType
+        println("Node: $newBufferType => ${bbNode.name} '${bbNode.attributes ?: ""}'")
 
-        if (!bufferReleased) {
-            bbNode.nodes?.forEach {
-                printWidgetRec(it, bbParents)
-            }
-        }
-
-        if (bbNode != rootNodeId) {
-            if (bbParents.isNotEmpty()) {
-                if (bufferReleased) {
-                    //releaseBuffer(bbParents)
-                } else {
-                    //closeBuffer(bbNode)
-                }
-                if (type == BbOp.Type.TEXT) {
-                    closeBuffer(bbNode)
-                }
-            }
-            bbParents.remove(bbNode)
+        bbNode.nodes?.forEach {
+            printWidgetRec(it, bbParents)
         }
     }
 
